@@ -1,2 +1,0 @@
-wget -O ./data/f_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmTqBkftsVo3KnmnNDtt8jsZK6M48Aq4HV8NnLANFhjtQJ"
-wget -O ./data/b_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmdPEKMacoztd2waAZpUYwrucFSkHN7XrCJSkdaorZgHaj"
