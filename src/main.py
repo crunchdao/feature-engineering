@@ -20,17 +20,22 @@ def main(get_data=False):
     if get_data == True:
         get_data()
     
-    f_matrix = pd.read_parquet("/Users/utkarshpratiush/Cr_D/Feature engg/feature_engineering/data/f_matrix.parquet")
-    b_matrix = pd.read_parquet("/Users/utkarshpratiush/Cr_D/Feature engg/feature_engineering/data/f_matrix.parquet")
-    
+    f_matrix = pd.read_parquet("../data/f_matrix.parquet")
+    b_matrix = pd.read_parquet("../data/b_matrix.parquet")
 
 
     data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
-    #print(f_matrix)
+    # exp0 = data.exposure()
+    data.plot_corr(f_matrix, 'f_matrix0')
+    data.plot_dist(f_matrix, 'f_hist0')
 
-    print(data.exposure())
-
-    
+    f_orth = data.orthogonalize()
+    # exp1 = data.exposure()
+    # print(exp1)
+    data.plot_dist(f_orth, 'f_hist1')
+    data.plot_corr(f_orth, 'f_matrix1')
+    f_gauss = data.gaussianize()
+    data.plot_dist(f_orth, 'f_hist1')
 
 if __name__ == '__main__':
     main()
