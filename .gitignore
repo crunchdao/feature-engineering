@@ -621,3 +621,4 @@ MigrationBackup/
 *.png
 *.parquet
 *.csv
+*.ipynb
