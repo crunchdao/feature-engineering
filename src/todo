@@ -1,0 +1,20 @@
+c
+orthonalize f_matrix (check exposure?)->X -----> gaussianize f_matrix (check exposure?) ->X -------> orthonalize f_matrix (check exposure?) -> X -----> standardize f_matrix
+-----> PCA f_matrix -----> standardize f_matrix ----> quantization
+
+
+pca
+
+standardization
+
+quantization
+done
+---------------------------------------------
+plotting:
+- corr_ 
+- plot this
+
+---------------------------------------------
+
+
+then target quantization

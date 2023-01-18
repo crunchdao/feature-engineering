@@ -20,22 +20,78 @@ def main(get_data=False):
     if get_data == True:
         get_data()
     
-    f_matrix = pd.read_parquet("../data/f_matrix.parquet")
-    b_matrix = pd.read_parquet("../data/b_matrix.parquet")
+    f_matrix = pd.read_parquet("../data/f_matrix.parquet") #103615 rows × 8 columns
+    b_matrix = pd.read_parquet("../data/b_matrix.parquet") #103615 rows × 67 columns
 
 
     data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
-    # exp0 = data.exposure()
-    data.plot_corr(f_matrix, 'f_matrix0')
-    data.plot_dist(f_matrix, 'f_hist0')
 
-    f_orth = data.orthogonalize()
-    # exp1 = data.exposure()
-    # print(exp1)
-    data.plot_dist(f_orth, 'f_hist1')
-    data.plot_corr(f_orth, 'f_matrix1')
-    f_gauss = data.gaussianize()
-    data.plot_dist(f_orth, 'f_hist1')
+    print("----------Data reading done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data orthogonalization start --------------------------------")
+    data.orthogonalize()
+    print("----------Data orthogonalization done --------------------------------")
+
+    # Plot corr
+    data.plot_corr(data.f_matrix, fig_name= "check1_corr")
+    # Plot dist
+    data.plot_dist(data.f_matrix, fig_name= "check1_dist")
+    
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data Gaussianize start --------------------------------")
+    data.gaussianize()
+    print("----------Data Gaussianize done --------------------------------")
+    
+    # Plot corr
+    data.plot_corr(data.f_matrix, fig_name= "check2_corr")
+    # Plot dist
+    data.plot_dist(data.f_matrix, fig_name= "check2_dist")
+    
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data Orthogonalization start --------------------------------")
+    data.orthogonalize()
+    print("----------Data Orthogonalization done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+    # Plot corr
+    data.plot_corr(data.f_matrix, fig_name= "check3_corr")
+    # Plot dist
+    data.plot_dist(data.f_matrix, fig_name= "check3_dist")
+    
+    print("----------Data standarization start --------------------------------")
+    data.standardize()
+    print("----------Data standarization done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+
+    # PCA 
+    print("----------PCA on f_matrix start --------------------------------")
+    data.pca()
+    print("----------PCA on f_matrix end --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+    
+    
+
+    print("----------standarize start--------------------------------")
+    # Standardize
+    data.standardize()
+    print("----------standarize end--------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+    # Plot corr
+    data.plot_corr(data.f_matrix, fig_name= "check4_corr")
+    # Plot dist
+    data.plot_dist(data.f_matrix, fig_name= "check4_dist")
+    
+    print("----------Data quantization start --------------------------------")
+    data.quantizer()
+    print("----------Data quantization done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+    # Plot corr
+    data.plot_corr(data.f_matrix, fig_name= "check5_corr")
+    # Plot dist
+    data.plot_dist(data.f_matrix, fig_name= "check5_dist", ndist=100, gbell=False)
 
 if __name__ == '__main__':
     main()

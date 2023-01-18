@@ -4,12 +4,14 @@ import scipy
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
-import gauss
+import utils.gauss
+from tqdm import tqdm
+from sklearn.decomposition import PCA
+from utils import gauss
+from utils.quantization import quantize
 
 class Data:
-
     
-
     def __init__(self, f_matrix, b_matrix ):
         """
         f_matrix:   features.parquet
@@ -21,7 +23,7 @@ class Data:
 
     def exposure(self):
         """
-        
+        Returns: the f_exposure (measure of orthogonailty of f_matrix(master) to b_matrix(factors))
         """
         def loc_exposure(f_mat_temp):
             features = f_mat_temp.columns[1:]
@@ -54,7 +56,7 @@ class Data:
         plt.savefig(f'../fig/{fig_name}_pearson.png')
         return 0
     
-    def plot_dist(self, data, fig_name):
+    def plot_dist(self, data, fig_name, ndist=600, gbell=True):
 
         Path('../fig').mkdir(parents=True, exist_ok=True)
 
@@ -63,13 +65,39 @@ class Data:
             sigma = data[col].std()
             x = np.linspace(mu - 3*sigma, mu + 3*sigma, 100)
             
-            data[col].hist(bins=600, density=True)
-            plt.plot(x, scipy.stats.norm.pdf(x, mu, sigma))
-
+            plt.figure(figsize=(15, 10))
+            data[col].hist(bins=ndist, density=True)
+            if gbell:
+                plt.plot(x, scipy.stats.norm.pdf(x, mu, sigma))
             plt.title(f'{col}')
             plt.grid('on')
             plt.savefig(f'../fig/{fig_name}_{col}.png')
-            plt.show()
+        return 0
+
+    def standardize(self):
+        """
+
+        return: updates the self.f_matrix to standardised version
+        
+        """
+        def preprocess(local_f_matrix):
+            """
+            get sigma --> median of the std dev list
+            
+            """
+            epochs = local_f_matrix[local_f_matrix.columns[0]].unique()
+            for col in tqdm(local_f_matrix.columns[1:]):
+                sigma_list = []
+                for epoch in tqdm(epochs):
+                    M = local_f_matrix.loc[local_f_matrix['date'] == epoch, col]
+                    sigma_list.append(M.std())
+                sigma = np.median(sigma_list)
+                for epoch in tqdm(epochs):
+                    local_f_matrix.loc[local_f_matrix['date'] == epoch, col] /= sigma
+            
+            return local_f_matrix
+
+        self.f_matrix = preprocess(self.f_matrix)
         return 0
 
         
@@ -89,7 +117,7 @@ class Data:
             return f_mat_temp
 
         self.f_matrix = self.f_matrix.groupby('date', group_keys=False).apply(lambda x: loc_orthogonalize(x))
-        return self.f_matrix
+        return 0
 
     def gaussianize(self):
 
@@ -102,7 +130,7 @@ class Data:
             kurt_tg = []
             skew_tg = []
 
-            epochs = f_local.columns[0].unique()
+            epochs = f_local[f_local.columns[0]].unique()
             for epoch in epochs:
                 f_local_epoch = f_local[col][f_local['date'] ==  epoch]
                 std = f_local_epoch.std()
@@ -133,4 +161,36 @@ class Data:
                 y = gauss_kernel.transform(f_local_epoch)
                 self.f_matrix.loc[f_local['date'] ==  epoch, col] = np.squeeze(y)
 
-        return self.f_matrix
+        return 0
+
+
+    def pca(self):
+        """
+        returns : updates f_matrix(nd) --> f_matrix(nd)
+        """
+        pca = PCA(n_components=len(self.f_matrix.columns[1:]))
+        pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
+
+        f_pca = pd.DataFrame()
+        f_pca['date'] = self.f_matrix['date']
+        f_pca[self.f_matrix.columns[1:]] = np.nan
+                    
+        epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
+        for epoch in tqdm(epochs):
+            daily = self.f_matrix[self.f_matrix['date'] ==  epoch][self.f_matrix.columns[1:]]
+            daily_pca = pca.transform(daily)
+            f_pca.loc[f_pca['date'] ==  epoch, self.f_matrix.columns[1:]] = daily_pca
+
+        self.f_matrix = f_pca
+
+        return 0
+
+
+    def quantizer(self):
+        """
+        Returns: updated f_matrix after quantization
+
+        """
+        self.f_matrix = self.f_matrix.groupby('date', group_keys=False).apply(lambda x: quantize(x))
+        return 0
+
