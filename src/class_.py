@@ -44,21 +44,21 @@ class Data:
         data: Matrix
         
         """
-        Path('../fig').mkdir(parents=True, exist_ok=True)
+        Path('./paper/figures/').mkdir(parents=True, exist_ok=True)
 
         spear_corr = scipy.stats.spearmanr(data.drop(['date'], axis=1))[0]
         plt.figure(figsize=(15, 10))
         sns.heatmap(spear_corr)
-        plt.savefig(f'../fig/{fig_name}_spearman.png')
+        plt.savefig(f'./paper/figures/{fig_name}_spearman.png')
 
         plt.figure(figsize=(15, 10))
         sns.heatmap(data.drop(['date'], axis=1).corr())
-        plt.savefig(f'../fig/{fig_name}_pearson.png')
+        plt.savefig(f'./paper/figures/{fig_name}_pearson.png')
         return 0
     
     def plot_dist(self, data, fig_name, ndist=600, gbell=True):
 
-        Path('../fig').mkdir(parents=True, exist_ok=True)
+        Path('./paper/figures/').mkdir(parents=True, exist_ok=True)
 
         for col in data.columns[1:]:
             mu = data[col].mean()
@@ -71,7 +71,7 @@ class Data:
                 plt.plot(x, scipy.stats.norm.pdf(x, mu, sigma))
             plt.title(f'{col}')
             plt.grid('on')
-            plt.savefig(f'../fig/{fig_name}_{col}.png')
+            plt.savefig(f'./paper/figures/{fig_name}_{col}.png')
         return 0
 
     def standardize(self):
@@ -88,11 +88,11 @@ class Data:
             epochs = local_f_matrix[local_f_matrix.columns[0]].unique()
             for col in tqdm(local_f_matrix.columns[1:]):
                 sigma_list = []
-                for epoch in tqdm(epochs):
+                for epoch in epochs:
                     M = local_f_matrix.loc[local_f_matrix['date'] == epoch, col]
                     sigma_list.append(M.std())
                 sigma = np.median(sigma_list)
-                for epoch in tqdm(epochs):
+                for epoch in epochs:
                     local_f_matrix.loc[local_f_matrix['date'] == epoch, col] /= sigma
             
             return local_f_matrix
@@ -122,7 +122,7 @@ class Data:
     def gaussianize(self):
 
         f_local = self.f_matrix
-        for col in f_local.columns[1:]:
+        for col in tqdm(f_local.columns[1:]):
             gauss_kernel = gauss.Gaussianize(tol=1e-10, max_iter=1000)
 
             mn_tg = []
@@ -131,7 +131,7 @@ class Data:
             skew_tg = []
 
             epochs = f_local[f_local.columns[0]].unique()
-            for epoch in epochs:
+            for epoch in tqdm(epochs):
                 f_local_epoch = f_local[col][f_local['date'] ==  epoch]
                 std = f_local_epoch.std()
                 skew = scipy.stats.skew(f_local_epoch)

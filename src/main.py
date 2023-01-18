@@ -12,16 +12,16 @@ def get_data():
     return 0
 
 
-def main(get_data=False):
+def main(gd=True):
     """
     get_data: Boolean 
     
     """
-    if get_data == True:
+    if gd:
         get_data()
     
-    f_matrix = pd.read_parquet("../data/f_matrix.parquet") #103615 rows × 8 columns
-    b_matrix = pd.read_parquet("../data/b_matrix.parquet") #103615 rows × 67 columns
+    f_matrix = pd.read_parquet("./data/f_matrix.parquet") #103615 rows × 8 columns
+    b_matrix = pd.read_parquet("./data/b_matrix.parquet") #103615 rows × 67 columns
 
 
     data = Data(f_matrix = f_matrix, b_matrix = b_matrix)

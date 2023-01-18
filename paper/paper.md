@@ -48,39 +48,9 @@ For each cross section, a feature Matrix \textbf{X}$_{N\times F}$ is our current
 
 In a supervised learning framework, associated with such feature matrix there are multiple targets, which for us represent the compound return orthogonal unexplained by the factor model. As we can work with multiple targets independently here, we will focus on one: \textbf{Y}.
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_2.png}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_3.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_4.png}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_5.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_6.png}
-\endminipage
-\end{figure}
-
 # Orthogonalization
 
-One reason for which predictions $\hat{Y}$ with good linear correlation 
+One reason for which predictions $\hat{Y}$ with good linear correlation: 
 
 \begin{equation}
 corr(\hat{Y}, Y) \gg 0
@@ -97,91 +67,68 @@ corr(X, B) \gg 0 \Rightarrow \left( f(X) \approx A X \Rightarrow  \left( \mathbf
 \right)
 \end{equation}
 
-in which the last implication is due to the fact that, in a portfolio management framework, $\omega$ and $\hat{Y}$ are naturally highly correlated.
-
-\begin{figure}[!htb]
-  \includegraphics[width=.3\linewidth]{plots/exposure.png}
-\end{figure}
-
-\begin{figure}[!htb]
-  \includegraphics[width=.25\linewidth]{plots/gram.png}
-\end{figure}
-
-We cannot use Gram-Schmidt (iteratively orthogonalize against all factors), as factors in general do not define an orthogonal basis. We project each feature in a least-square sense:
+in which the last implication is due to the fact that, in a portfolio management framework, $\omega$ and $\hat{Y}$ are naturally highly correlated. We cannot use Gram-Schmidt (iteratively orthogonalize against all factors), as factors in general do not define an orthogonal basis. We project each feature in a least-square sense:
 
 \begin{equation}
     h(X) = X - B \left( B^T B\right)^{-1} B^T X
 \end{equation}
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/exposure_O.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/covariance_O.png}
-\endminipage
-\end{figure}
-
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_0_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_0.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_1_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_1.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_2_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_2.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_3_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_3.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_4_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_4.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_5_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_5.png}
 \endminipage
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_6_O.png}
+  \includegraphics[width=\linewidth]{figures/check1_dist_feature_6.png}
 \endminipage
 \end{figure}
 
 # Gaussianization
 
-\begin{figure}[!htb]
-  \includegraphics[width=.7\linewidth]{plots/schematic_lambert.png}
-\end{figure}
-
 At this point features are strongly non-Gaussian [@taleb2020], while the volatility of the first four statistical moments is small enough for us to define an invariant measure to Gaussianize them [@Goerg_2010], [@Arbabi_2019], [@Marti_2016]. This step also further reduces the non-stationarity of the features.
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_0_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_0.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_1_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_1.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_2_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_2.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_3_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_3.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_4_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_4.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_5_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_5.png}
 \endminipage
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_6_OG_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check2_dist_feature_6.png}
 \endminipage
 \end{figure}
 
@@ -191,31 +138,31 @@ Moreover, performing the three steps OGO, compared to only the first O step, lea
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_0_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_0.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_1_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_1.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_2_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_2.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_3_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_3.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_4_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_4.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_5_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_5.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_6_OGO_gaussian.png}
+  \includegraphics[width=\linewidth]{figures/check3_dist_feature_6.png}
 \endminipage
 \end{figure}
 
@@ -239,75 +186,69 @@ All the steps after the second orthogonalization are linear transformations: out
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_0_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_0.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_1_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_1.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_2_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_2.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_3_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_3.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{plots/feature_4_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_4.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_5_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_5.png}
 \endminipage
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{plots/feature_6_final.png}
+  \includegraphics[width=\linewidth]{figures/check4_dist_feature_6.png}
 \endminipage
 \end{figure}
 
 \begin{figure}[!htb]
-  \includegraphics[width=.55\linewidth]{plots/final_correlation.png}
+  \includegraphics[width=.55\linewidth]{figures/check4_corr_pearson.png}
 \end{figure}
 
 # Quantization
 
 We perform Lloyd-Max Quantization [@Lloyd_1982] to solve a classification problem in a least-square sense.
 
-\begin{figure}[!htb]
-  \includegraphics[width=0.4\linewidth]{plots/feature_0_quantized.png}
-\end{figure}
-\begin{figure}[!htb]
-  \includegraphics[width=0.4\linewidth]{plots/feature_1_quantized.png}
-\end{figure}
-
-# Target
-
-\begin{figure}[!htb]
-  \includegraphics[width=.3\linewidth]{plots/target_raw.png}
-\end{figure}
-
-Targets are not Gaussian: given the knowledge of assets ranking, the distribution of expected targets is fat tailed.
 
 \begin{figure}[!htb]
 \minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/alpha_score.png}
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_0.png}
 \endminipage\hfill
 \minipage{0.33\textwidth}
-$$
-\Longrightarrow
-$$
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_1.png}
 \endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{plots/fat_alpha_score.png}
+\minipage{0.33\textwidth}%
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_2.png}
 \endminipage
 \end{figure}
-\end{frame}
-
-## Quantization
-
-We constrain the distribution of the quantized targets to match the non-zero kurtosis of the target. The relative size of each bin is again obtained maximizing the explained variance of the classification step, for a given number of bins, like for the features.
 
 \begin{figure}[!htb]
-  \includegraphics[width=.6\linewidth]{plots/target_quantized.png}
+\minipage{0.25\textwidth}
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_3.png}
+\endminipage\hfill
+\minipage{0.25\textwidth}
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_4.png}
+\endminipage\hfill
+\minipage{0.25\textwidth}%
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_5.png}
+\endminipage
+\minipage{0.25\textwidth}%
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_6.png}
+\endminipage
+\end{figure}
+
+\begin{figure}[!htb]
+  \includegraphics[width=.55\linewidth]{figures/check5_corr_pearson.png}
 \end{figure}
 
 # References

@@ -11,6 +11,7 @@ Resources: https://github.com/ninfueng/lloyd-max-quantizer
 import numpy as np
 import scipy.integrate as integrate
 
+
 def normal_dist(x, mean=0.0, vari=1.0):
     """A normal distribution function created to use with scipy.integral.quad
     """

@@ -4,4 +4,6 @@ seaborn
 tqdm
 numpy
 scipy
-sklearn
+scikit-learn
+pyarrow
+fastparquet
