@@ -8,7 +8,7 @@ import utils.gauss
 from tqdm import tqdm
 from sklearn.decomposition import PCA
 from utils import gauss
-from utils.quantization import quantize
+from utils.quantization import hard_quantize
 
 class Data:
 
@@ -190,6 +190,8 @@ class Data:
         Returns: updated f_matrix after quantization
 
         """
-        self.f_matrix = self.f_matrix.groupby('date', group_keys=False).apply(lambda x: quantize(x))
+        bins = [0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
+        quant = self.f_matrix.groupby('date', group_keys=False).transform(lambda x: hard_quantize(x, bins))
+        self.f_matrix = pd.concat([self.f_matrix['date'], quant], axis=1)
         return 0
 

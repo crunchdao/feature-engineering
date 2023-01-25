@@ -4,6 +4,8 @@ import numpy as np
 import os
 
 from class_ import Data
+from utils.quantization import quantize
+from targets import tg_process
 
 def get_data():
     """
@@ -17,14 +19,23 @@ def main(gd=True):
     get_data: Boolean 
     
     """
+
+    print("----------Targets quantization start --------------------------------")
+    targets = pd.read_parquet("./data/target.parquet")
+    targets = tg_process(targets)
+    print(targets.head())
+    print(targets.describe())
+    print("----------Targets quantization done--------------------------------")
+
     if gd:
         get_data()
-    
+
     f_matrix = pd.read_parquet("./data/f_matrix.parquet")
     b_matrix = pd.read_parquet("./data/b_matrix.parquet")
 
 
     data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
+    data.plot_dist(targets, fig_name= "check_tg_dist", ndist=100, gbell=False)
 
     print("----------Data reading done --------------------------------")
     print(data.f_matrix.head(), data.exposure().head())

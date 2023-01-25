@@ -50,7 +50,7 @@ In a supervised learning framework, associated with such feature matrix there ar
 
 # Orthogonalization
 
-One reason for which predictions $\hat{Y}$ with good linear correlation: 
+One reason for which predictions $\hat{Y}$ with good linear correlation:
 
 \begin{equation}
 corr(\hat{Y}, Y) \gg 0
@@ -249,6 +249,25 @@ We perform Lloyd-Max Quantization [@Lloyd_1982] to solve a classification proble
 
 \begin{figure}[!htb]
   \includegraphics[width=.55\linewidth]{figures/check5_corr_pearson.png}
+\end{figure}
+
+# Targets
+
+Targets are simply quantized. This is done maximizing the explained variance of the quantization scheme assuming a median distribution across all historical observations.
+
+\begin{figure}[!htb]
+\minipage{0.25\textwidth}
+  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_w.png}
+\endminipage\hfill
+\minipage{0.25\textwidth}
+  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_r.png}
+\endminipage\hfill
+\minipage{0.25\textwidth}%
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_g.png}
+\endminipage
+\minipage{0.25\textwidth}%
+  \includegraphics[width=\linewidth]{figures/check5_dist_feature_b.png}
+\endminipage
 \end{figure}
 
 # References

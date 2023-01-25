@@ -109,36 +109,45 @@ class LloydMaxQuantizer(object):
                                    np.full(np.size(x_hat_q), repre[i]), x_hat_q)
         return x_hat_q
 
-def quantize(local_f_matrix):
+def quantize(x):
     
     bits = 7
     iterations = 10
 
-    features = local_f_matrix.columns[1:]
-    for feature in features:
-        x = local_f_matrix[feature]
-        repre = LloydMaxQuantizer.start_repre(x, bits)
-        min_loss = 1.0
+    repre = LloydMaxQuantizer.start_repre(x, bits)
+    min_loss = 1.0
 
-        for i in range(iterations):
-            thre = LloydMaxQuantizer.threshold(repre)
-            repre = LloydMaxQuantizer.represent(thre, expected_normal_dist, normal_dist)
-            x_hat_q = LloydMaxQuantizer.quant(x, thre, repre)
-            loss = MSE_loss(x, x_hat_q)
+    for i in range(iterations):
+        thre = LloydMaxQuantizer.threshold(repre)
+        repre = LloydMaxQuantizer.represent(thre, expected_normal_dist, normal_dist)
+        x_hat_q = LloydMaxQuantizer.quant(x, thre, repre)
+        loss = MSE_loss(x, x_hat_q)
 
-            # Keep the threhold and representation that has the lowest MSE loss.
-            if(min_loss > loss):
-                min_loss = loss
-                min_thre = thre
-                min_repre = repre
+        # Keep the threhold and representation that has the lowest MSE loss.
+        if(min_loss > loss):
+            min_loss = loss
+            min_thre = thre
+            min_repre = repre
 
-        #x_hat_q with the lowest amount of loss.
-        best_x_hat_q = LloydMaxQuantizer.quant(x, min_thre, min_repre)
+    #x_hat_q with the lowest amount of loss.
+    best_x_hat_q = LloydMaxQuantizer.quant(x, min_thre, min_repre)
 
-        unique = np.unique(best_x_hat_q)
-        discrete = np.linspace(0, 1, bits)
-        for i in range(len(unique))[::-1]:
-            best_x_hat_q[best_x_hat_q == unique[i]] = discrete[i]
-        
-        local_f_matrix[feature] = best_x_hat_q
-    return local_f_matrix
+    unique = np.unique(best_x_hat_q)
+    discrete = np.linspace(0, 1, bits)
+    for i in range(len(unique))[::-1]:
+        best_x_hat_q[best_x_hat_q == unique[i]] = discrete[i]
+    
+    return best_x_hat_q
+
+def hard_quantize(x, bins):
+    quant_index_list = []
+    limit_old = -np.inf
+    for idx, el in enumerate(bins):
+        limit = x.quantile(el)
+        quant_index = (x <= limit) & (x >= limit_old)
+        quant_index_list.append(quant_index)
+        limit_old = limit
+
+    for idx, qi in enumerate(quant_index_list):
+        x.loc[qi] = round(idx/ (len(bins) - 1), 2)
+    return x
