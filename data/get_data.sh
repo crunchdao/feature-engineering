@@ -1,5 +1,5 @@
 echo "Downloading files from IPFS..."
-wget -O ./data/f_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmTqBkftsVo3KnmnNDtt8jsZK6M48Aq4HV8NnLANFhjtQJ"
-wget -O ./data/b_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmdPEKMacoztd2waAZpUYwrucFSkHN7XrCJSkdaorZgHaj"
-wget -O ./data/target.parquet "https://gateway.crunchdao.com/ipfs/Qmc53qiHu5SCtD4WCSAKNDEzvgbjMTAo9sLPrHWhAkXrax"
+wget -O ./data/f_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmaMcz53Y7WVXRh6ZAdsxPyry7EimoRyQqELHQ2wg7RZQ3"
+wget -O ./data/b_matrix.parquet "https://gateway.crunchdao.com/ipfs/QmQKY9rTxku4WWXBfXLFi76cwoDBaC1iTxQxv1QwoDwy2B"
+wget -O ./data/target.parquet "https://gateway.crunchdao.com/ipfs/QmWoMY3B4CuxDKXKDL6yHY9as1FPXhc9DCfTmBmmtNC7dv"
 echo "Download completed."

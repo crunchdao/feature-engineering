@@ -20,8 +20,8 @@ def main(gd=True):
     if gd:
         get_data()
     
-    f_matrix = pd.read_parquet("./data/f_matrix.parquet") #103615 rows × 8 columns
-    b_matrix = pd.read_parquet("./data/b_matrix.parquet") #103615 rows × 67 columns
+    f_matrix = pd.read_parquet("./data/f_matrix.parquet")
+    b_matrix = pd.read_parquet("./data/b_matrix.parquet")
 
 
     data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
