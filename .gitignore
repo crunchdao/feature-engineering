@@ -620,4 +620,3 @@ MigrationBackup/
 .ipynb_checkpoints
 *.parquet
 *.csv
-*.ipynb

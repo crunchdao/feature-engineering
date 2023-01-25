@@ -11,7 +11,7 @@ from utils import gauss
 from utils.quantization import quantize
 
 class Data:
-    
+
     def __init__(self, f_matrix, b_matrix ):
         """
         f_matrix:   features.parquet
@@ -76,10 +76,9 @@ class Data:
 
     def standardize(self):
         """
-
         return: updates the self.f_matrix to standardised version
-        
         """
+        
         def preprocess(local_f_matrix):
             """
             get sigma --> median of the std dev list
