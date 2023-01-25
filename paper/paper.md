@@ -263,10 +263,10 @@ Targets are simply quantized. This is done maximizing the explained variance of 
   \includegraphics[width=\linewidth]{figures/check_tg_dist_target_r.png}
 \endminipage\hfill
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_feature_g.png}
+  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_g.png}
 \endminipage
 \minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_feature_b.png}
+  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_b.png}
 \endminipage
 \end{figure}
 
