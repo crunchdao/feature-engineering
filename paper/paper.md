@@ -74,96 +74,99 @@ in which the last implication is due to the fact that, in a portfolio management
 \end{equation}
 
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_2.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_0.png}
+\centering
 \end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_3.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_4.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_5.png}
-\endminipage
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check1_dist_feature_6.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_1.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_2.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_3.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_4.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_5.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check1_dist_feature_6.png}
+\centering
 \end{figure}
 
 # Gaussianization
 
 At this point features are strongly non-Gaussian [@taleb2020], while the volatility of the first four statistical moments is small enough for us to define an invariant measure to Gaussianize them [@Goerg_2010], [@Arbabi_2019], [@Marti_2016]. This step also further reduces the non-stationarity of the features.
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_2.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_0.png}
+\centering
 \end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_3.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_4.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_5.png}
-\endminipage
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check2_dist_feature_6.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_1.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_2.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_3.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_4.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_5.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check2_dist_feature_6.png}
+\centering
 \end{figure}
 
 As the kernel implicitly defined by the Gaussianization step is nonlinear, the orthogonality condition is destroyed: we can however perform again orthogonalization and obtain orthogonal, Gaussian features.
 
 Moreover, performing the three steps OGO, compared to only the first O step, leads to features which are always more than 98.09\% Spearman rank correlated.
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_2.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_0.png}
+\centering
 \end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_3.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_4.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_1.png}
+\centering
 \end{figure}
-
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_5.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check3_dist_feature_6.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_2.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_3.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_4.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_5.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check3_dist_feature_6.png}
+\centering
 \end{figure}
 
 # Standardization
@@ -179,40 +182,43 @@ The Gaussianization step is implicitly introducing a kernel, so that this proced
 We here obtain new features linearly combining them. The linear combination coefficients come from Single Value Decomposition: we can hence standardize again.
 
 \begin{equation}
-X_j^{out} =\frac{1}{\sigma_{j2}}\beta_j \sum_i \alpha_{ij} \frac{1}{\sigma_{j1}} \cdot \left( k_j\left( X_i^{in} - A_{i1} \right) - A_{i2} \right)
+X_j^{out} =\frac{1}{\sigma_{j2}} \sum_i \alpha_{ij} \frac{1}{\sigma_{j1}} \cdot \left( k_j\left( X_i^{in} - A_{i1} \right) - A_{i2} \right)
 \end{equation}
 
 All the steps after the second orthogonalization are linear transformations: output features remain orthogonal to the factor space.
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_2.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_0.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_1.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_2.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_3.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_4.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_5.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_dist_feature_6.png}
+\centering
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_3.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_4.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_5.png}
-\endminipage
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check4_dist_feature_6.png}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-  \includegraphics[width=.55\linewidth]{figures/check4_corr_pearson.png}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check4_corr_pearson.png}
+\centering
 \end{figure}
 
 # Quantization
@@ -220,54 +226,59 @@ All the steps after the second orthogonalization are linear transformations: out
 We perform Lloyd-Max Quantization [@Lloyd_1982] to solve a classification problem in a least-square sense.
 
 
-\begin{figure}[!htb]
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_0.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_1.png}
-\endminipage\hfill
-\minipage{0.33\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_2.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_0.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_1.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_2.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_3.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_4.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_5.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_dist_feature_6.png}
+\centering
 \end{figure}
 
-\begin{figure}[!htb]
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_3.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_4.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_5.png}
-\endminipage
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check5_dist_feature_6.png}
-\endminipage
-\end{figure}
-
-\begin{figure}[!htb]
-  \includegraphics[width=.55\linewidth]{figures/check5_corr_pearson.png}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check5_corr_pearson.png}
+\centering
 \end{figure}
 
 # Targets
 
 Targets are simply quantized. This is done maximizing the explained variance of the quantization scheme assuming a median distribution across all historical observations.
 
-\begin{figure}[!htb]
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_w.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_r.png}
-\endminipage\hfill
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_g.png}
-\endminipage
-\minipage{0.25\textwidth}%
-  \includegraphics[width=\linewidth]{figures/check_tg_dist_target_b.png}
-\endminipage
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check_tg_dist_target_w.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check_tg_dist_target_r.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check_tg_dist_target_g.png}
+\centering
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{figures/check_tg_dist_target_b.png}
+\centering
 \end{figure}
 
 # References
