@@ -1,0 +1,9 @@
+pandas
+matplotlib
+seaborn
+tqdm
+numpy
+scipy
+scikit-learn
+pyarrow
+fastparquet
