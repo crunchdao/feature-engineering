@@ -22,7 +22,7 @@ def main(gd=True):
 
     if gd:
         get_data()
-
+    
     print("----------Targets quantization start --------------------------------")
     targets = pd.read_parquet("./data/target.parquet")
     targets = tg_process(targets)
