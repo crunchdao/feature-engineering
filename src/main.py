@@ -6,6 +6,7 @@ import os
 from class_ import Data
 from utils.quantization import quantize
 from targets import tg_process
+from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
 
 def get_data():
     """
@@ -42,6 +43,12 @@ def main(gd=True):
     print("----------Data orthogonalization start --------------------------------")
     data.orthogonalize()
     print("----------Data orthogonalization done --------------------------------")
+
+    print("----------Checking outlier-----------------------------------")
+    print("Total_indices", len(data.f_matrix))
+    print("outlier_based_on_Zscore",detect_outliers_zscore(data.f_matrix, threshold=3.0).sum())
+    print("outlier_based_on_quantile",detect_outliers_quantile(data.f_matrix, multiplier=1.5).sum())
+    print("----------Checking outlier done-----------------------------------" )
 
     # Plot corr
     data.plot_corr(data.f_matrix, fig_name= "check1_corr")
@@ -105,4 +112,4 @@ def main(gd=True):
     data.plot_dist(data.f_matrix, fig_name= "check5_dist", ndist=100, gbell=False)
 
 if __name__ == '__main__':
-    main()
+    main(gd = False)
