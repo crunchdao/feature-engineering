@@ -135,7 +135,9 @@ At this point features are strongly non-Gaussian [@taleb2020], while the volatil
 \centering
 \end{figure}
 
-As the kernel implicitly defined by the Gaussianization step is nonlinear, the orthogonality condition is destroyed: we can however perform again orthogonalization and obtain orthogonal, Gaussian features.
+It is worth underlying, at this step, an analogy between this procedure and the use of fractional calculus for financial time series, discussed in [@prado_advances_2018] and the use of the fractional Fokker-Plank equation to model anomalous diffusion (i.e., noise models with non-Gaussian statistics) [@PhysRevLett.82.3563]. As fractional calculus for nonlocal dynamics is associated with nonlocal operators in time [@9483209] and can be used to transform observations to a desired statistics (maximizing correlation between the original data), so this Gaussianization step implicitly introduces a cross-sectional nonlinear metric. The two analogous perspective are equivalent in the context of the ergodic hypotesis [@ergodicity_marko].
+
+As the Gaussianization step is nonlinear, the orthogonality condition is destroyed: we can however perform again orthogonalization and obtain orthogonal, Gaussian features.
 
 Moreover, performing the three steps OGO, compared to only the first O step, leads to features which are always more than 98.09\% Spearman rank correlated.
 
