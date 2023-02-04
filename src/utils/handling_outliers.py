@@ -34,3 +34,5 @@ def detect_outliers_quantile(df, multiplier=1.5):
         upper_bound = Q3 + multiplier * IQR
         outliers_idx = np.logical_or(outliers_idx, (df[col] < lower_bound) | (df[col] > upper_bound))
     return outliers_idx
+
+
