@@ -1,0 +1,4 @@
+# outlier front:
+1. VAE requires labels first--> shall we curate labels 0,1 --> and then 
+
+https://github.com/yzhao062/pyod/blob/master/notebooks/Compare%20All%20Models.ipynb

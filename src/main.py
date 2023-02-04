@@ -6,7 +6,7 @@ import os
 from class_ import Data
 from utils.quantization import quantize
 from targets import tg_process
-from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
+from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore, detect_outliers_zscore_multivariate
 
 def get_data():
     """
@@ -47,6 +47,7 @@ def main(gd=True):
     print("----------Checking outlier-----------------------------------")
     print("Total_indices", len(data.f_matrix))
     print("outlier_based_on_Zscore",detect_outliers_zscore(data.f_matrix, threshold=3.0).sum())
+    print("outlier_based_on_Zscore_multivariate",detect_outliers_zscore_multivariate(data.f_matrix, threshold=3.0))
     print("outlier_based_on_quantile",detect_outliers_quantile(data.f_matrix, multiplier=1.5).sum())
     print("----------Checking outlier done-----------------------------------" )
 
