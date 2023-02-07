@@ -198,15 +198,19 @@ class Data:
         return 0
 
     
-    def cross_sectional_moments(self):
+    def cross_sectional_moments(self, to_moon=False):
         """Return DataFrame col: df.columns
         
         """
 
         df = self.f_matrix.copy()
-        df["moon"] = df.date.astype('category').cat.codes
-        df = df.drop(columns = ["date"])
-        moons = df["moon"].unique()
+        if to_moon:
+            df["moon"] = df.date.astype('category').cat.codes
+            df = df.drop(columns = ["date"])
+            grouper = 'moon'
+        else:
+            grouper = 'date'
+            
         col = df.columns
 
         def moonwise_moments(df):
@@ -223,7 +227,7 @@ class Data:
 
             return  results
             
-        df_moments = df.groupby("moon").apply(lambda x: moonwise_moments(x))
+        df_moments = df.groupby(grouper).apply(lambda x: moonwise_moments(x))
         df_moments = df_moments.reset_index().drop('level_1', axis=1)
         
         self.df_moments = df_moments
