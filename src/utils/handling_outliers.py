@@ -2,11 +2,28 @@ import pandas as pd
 import numpy as np
 from numpy import linalg as LA
 from scipy.stats import kurtosis
-#import pdb
 
-
-
-
+def detect_cross_section_outliers_zscore(df, threshold=3.0):
+    """
+    df: Datframe
+    threshold: multiple of std deviation
+    
+    Returns: Array with boolean values, True -> outlier
+    """
+    cols = df.columns
+    epochs = df.date.unique()
+    outliers_idx = np.array([False] * len(epochs))
+    def function(x):
+        # check here if the cross section x of a given epoch has a statistics strongly different from the average one
+        return True
+  
+    for col in cols:
+        output = df.grouby('date')[col].apply(lambda x: function(x))
+        outliers_idx = np.logical_or(outliers_idx, output)
+    outliers_idx_df = pd.DataFrame()
+    outliers_idx_df['date'] = epochs
+    outliers_idx_df = pd.concat(outliers_idx_df, outliers_idx)
+    return outliers_idx_df
 
 def detect_outliers_zscore(df, threshold=3.0):
     """

@@ -234,11 +234,4 @@ class Data:
             results = pd.concat([results, result], ignore_index=True)
 
         self.f_moon_matrix = results
-
         return self.f_moon_matrix
-
-        
-    
-
-
-
