@@ -198,7 +198,7 @@ class Data:
         return 0
 
     
-    def moon_wise_moment(self):
+    def cross_sectional_moments(self):
         """Return DataFrame col: df.columns
         
         """
@@ -207,31 +207,24 @@ class Data:
         df["moon"] = df.date.astype('category').cat.codes
         df = df.drop(columns = ["date"])
         moons = df["moon"].unique()
-        df_group = df.groupby("moon")
         col = df.columns
 
-        def for_group(df, moon):
-            results = pd.DataFrame(columns=['moment', 'mean', 'std', 'skewness', 'kurtosis'])
-            for col in df.columns:
-                if col != "moon":
-                    mean = df[col].mean()
-                    std = df[col].std()
-                    skewness = stats.skew(df[col])
-                    kurtosis = stats.kurtosis(df[col])
-                    #results = results.append({'moment': col, 'mean': mean, 'std': std, 'skewness': skewness, 'kurtosis': kurtosis}, ignore_index=True)
-                    temp = pd.DataFrame([{'moment': col, 'mean': mean, 'std': std, 'skewness': skewness, 'kurtosis': kurtosis}])
-                    results = pd.concat([results, temp], ignore_index=True)
+        def moonwise_moments(df):
+            results = pd.DataFrame()
+            for col in df.columns[:-1]: # loop only over features.
+                col_names = [f'{col}_std', f'{col}_skew', f'{col}_kurt']
+                std = df[col].std()
+                skew = stats.skew(df[col])
+                kurt = stats.kurtosis(df[col])
+                
 
+                moments = {f'{col_names[0]}': [std], f'{col_names[1]}': [skew], f'{col_names[2]}': [kurt]}
+                results = pd.concat([results, pd.DataFrame(moments)], axis=1)
 
-            results = results.set_index('moment').T
-            results["moon"] = moon
-            results["moment"] = ['mean', 'std', 'skewness', 'kurtosis']
             return  results
-    
-        results = pd.DataFrame(columns=col)
-        for moon in moons:
-            result = for_group(df_group.get_group(moon), moon)
-            results = pd.concat([results, result], ignore_index=True)
-
-        self.f_moon_matrix = results
-        return self.f_moon_matrix
+            
+        df_moments = df.groupby("moon").apply(lambda x: moonwise_moments(x))
+        df_moments = df_moments.reset_index().drop('level_1', axis=1)
+        
+        self.df_moments = df_moments
+        return self.df_moments
