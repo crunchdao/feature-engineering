@@ -2,6 +2,11 @@ import pandas as pd
 import numpy as np
 from numpy import linalg as LA
 from scipy.stats import kurtosis
+#import pdb
+
+
+
+
 
 def detect_outliers_zscore(df, threshold=3.0):
     """
@@ -10,12 +15,18 @@ def detect_outliers_zscore(df, threshold=3.0):
     
     Returns: Array with boolean values, True -> outlier
     """
+    """
+    average moon statistic:
+    
+    """
+    df = df.drop(columns=["date"])
     cols = df.columns
     outliers_idx = np.array([False] * len(df))
     for col in cols:
         mean = df[col].mean()
         std = df[col].std()
         outliers_idx = np.logical_or(outliers_idx, np.abs(df[col] - mean) >= threshold * std)
+        #pdb.set_trace()
     return outliers_idx
 
 def detect_outliers_zscore_kurtosis(df, threshold=3.0):
@@ -25,6 +36,7 @@ def detect_outliers_zscore_kurtosis(df, threshold=3.0):
     
     Returns: Array with boolean values, True -> outlier
     """
+    df = df.drop(columns=["date"])
     cols = df.columns
     outliers_idx = np.array([False] * len(df))
     for col in cols:
