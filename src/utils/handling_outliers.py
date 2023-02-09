@@ -65,7 +65,7 @@ def detect_outliers_zscore_multivariate(df, threshold=3):
     #print(outliers)
 
     # Return the outlier indices
-    return len(outliers[0])
+    return outliers[0]
 
 
 def detect_outliers_quantile(df, multiplier=1.5):

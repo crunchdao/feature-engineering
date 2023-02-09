@@ -227,7 +227,7 @@ class Data:
 
             return  results
             
-        df_moments = df.groupby(grouper).apply(lambda x: moonwise_moments(x))
+        df_moments = df.groupby(grouper).progress_apply(lambda x: moonwise_moments(x)) # progress_apply adds progress bar
         df_moments = df_moments.reset_index().drop('level_1', axis=1)
         
         self.df_moments = df_moments
