@@ -3,23 +3,8 @@
 
 https://github.com/yzhao062/pyod/blob/master/notebooks/Compare%20All%20Models.ipynb
 
-def detect_outliers_zscore(df, threshold=3.0):
-    """
-    df: Datframe
-    threshold: multiple of std deviation
-    
-    Returns: Array with boolean values, True -> outlier
-    """
-    date_lis = df.date.unique()
-    cols = df.columns
-    outliers_idx = np.array([False] * len(df))
-    for col in cols:
-        mean = df[col].mean()
-        std = df[col].std()
-        outliers_idx = np.logical_or(outliers_idx, np.abs(df[col] - mean) >= threshold * std)
-    return outliers_idx
 
-
-epochs--> local_f_matrix[local_f_matrix.columns[0]].unique()
-
-# better to group by date and then call zscore function for each goup in groupby
+Outlier: 
+1. ZSCORE on: std, skewness, kurtosis --> intersection univariate sense done:
+2. ZSCORE on: std, skewness, kurtosis --> intersection multivariate sense done:
+3. Q How to select which  feature is bad? --> see the intersection?
