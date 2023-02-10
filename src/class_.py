@@ -117,49 +117,41 @@ class Data:
 
         self.f_matrix = self.f_matrix.groupby('date', group_keys=False).apply(lambda x: loc_orthogonalize(x))
         return 0
-
+        
     def gaussianize(self):
 
         f_local = self.f_matrix
         for col in tqdm(f_local.columns[1:]):
             gauss_kernel = gauss.Gaussianize(tol=1e-10, max_iter=1000)
-
-            mn_tg = []
-            std_tg = []
-            kurt_tg = []
-            skew_tg = []
-
-            epochs = f_local[f_local.columns[0]].unique()
-            for epoch in tqdm(epochs):
-                f_local_epoch = f_local[col][f_local['date'] ==  epoch]
+            
+            def moments(x, col):
+                f_local_epoch = x[col]
+                mn = f_local_epoch.mean()
                 std = f_local_epoch.std()
                 skew = scipy.stats.skew(f_local_epoch)
                 kurt = scipy.stats.kurtosis(f_local_epoch)
-                
-                mn_tg.append(f_local_epoch.mean())
-                std_tg.append(std)
-                skew_tg.append(skew)
-                kurt_tg.append(kurt)
-            mn_tg = np.array(mn_tg)
-            std_tg = np.array(std_tg)
-            skew_tg = np.array(skew_tg)
-            kurt_tg = np.array(kurt_tg)
-
-            moments = np.array([mn_tg, std_tg, skew_tg, kurt_tg])
-            median_moments = np.median(moments, axis=1)
-            for i in range(moments.shape[1]):
-                moments[:, i] -= median_moments
-                distance_moments = np.linalg.norm(moments, axis=0)
-            train_sample = f_local[f_local['date'] == epochs[distance_moments.argmin()]][col]
-
+                moments = {'mean': [mn], 'std': [std], 'skew': [skew], 'kurt': [kurt]}
+                return pd.DataFrame(moments)
+            
+            moments = f_local.groupby('date').apply(lambda x: moments(x, col))
+            moments = moments.to_numpy()
+            median_moments = np.median(moments, axis=0) # 4D
+            distance_moments = []
+            for i in range(moments.shape[0]):
+                moments[i, :] -= median_moments
+                distance_moments.append(np.linalg.norm(moments[i, :]))
+            distance_moments = np.array(distance_moments)
+            train_sample = f_local[f_local['date'] == f_local['date'].unique()[distance_moments.argmin()]][col].to_numpy()
+            
             # Gaussianize
             gauss_kernel.fit(train_sample)
-
-            for epoch in epochs:
-                f_local_epoch = f_local[col][f_local['date'] ==  epoch]
-                y = gauss_kernel.transform(f_local_epoch)
-                self.f_matrix.loc[f_local['date'] ==  epoch, col] = np.squeeze(y)
-
+            
+            def apply_kernel(x, col):
+                y = gauss_kernel.transform(x[col])
+                x.loc[:, col] = np.squeeze(y)
+                return x
+                
+            self.f_matrix.loc[:, col] = f_local.groupby('date', group_keys=False).apply(lambda x: apply_kernel(x, col))
         return 0
 
 
