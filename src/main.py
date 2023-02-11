@@ -134,37 +134,49 @@ def test_main():
     data.orthogonalize()
     print("----------Data orthogonalization done --------------------------------")
 
+    f_matrix_o = f_matrix.copy()
+    outliers_flag = True
+    while outliers_flag:
+        print(data.f_matrix.head(), data.exposure().head())
+        print("----------Data Gaussianize start --------------------------------")
+        data.gaussianize()
+        print("----------Data Gaussianize done --------------------------------")
+
+
+        
+        print(data.f_matrix.head(), data.exposure().head())
+        print("----------Data Orthogonalization start --------------------------------")
+        data.orthogonalize()
+        print("----------Data Orthogonalization done --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
+
+        
+        print("----------Data standarization start --------------------------------")
+        data.standardize()
+        print("----------Data standarization done --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
+
+        # PCA 
+        print("----------PCA on f_matrix start --------------------------------")
+        data.pca()
+        print("----------PCA on f_matrix end --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
+
+        print("----------Outlier detection on f_matrix start --------------------------------")
+        dates, outliers_flag = data.detect_outlier_moons()
+        print("----------Outlier detection on f_matrix end --------------------------------")
+
+        f_matrix_o.drop(f_matrix_o.index[f_matrix_o['date'].isin(dates)], inplace=True)
+
+        if outliers_flag:
+            data.f_matrix = f_matrix_o
+            # Also update b matrix to match the dates of the new f_matrix.
+        else:
+            break
     
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data Gaussianize start --------------------------------")
-    data.gaussianize()
-    print("----------Data Gaussianize done --------------------------------")
-
-
-    
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data Orthogonalization start --------------------------------")
-    data.orthogonalize()
-    print("----------Data Orthogonalization done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-
-    
-    print("----------Data standarization start --------------------------------")
-    data.standardize()
-    print("----------Data standarization done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-
-
-    # PCA 
-    print("----------PCA on f_matrix start --------------------------------")
-    data.pca()
-    print("----------PCA on f_matrix end --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-
-    # outiler dropping --------------------------------
-    """
-    
-    """
+    # standardize
+    # quantize
+    #.
 
 if __name__ == '__main__':
     #main(gd = False)

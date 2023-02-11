@@ -4,7 +4,6 @@ import scipy
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
-import utils.gauss
 from tqdm import tqdm
 from tqdm.notebook import tqdm
 tqdm.pandas()
@@ -13,18 +12,17 @@ from utils import gauss
 from utils.quantization import hard_quantize
 import scipy.stats as stats
 import pdb as pdb
-
+from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
 
 class Data:
 
-    def __init__(self, f_matrix, b_matrix ):
+    def __init__(self, f_matrix, b_matrix):
         """
         f_matrix:   features.parquet
         b_matrix:   factor_matrix.parquet
         """
         self.f_matrix = f_matrix
         self.b_matrix = b_matrix
-
 
 
     def exposure(self):
@@ -162,6 +160,42 @@ class Data:
         return 0
 
 
+    def detect_outlier_moons(self, norm_method='frobenius', out_method='zscore'):
+        """Returns
+        here f_matrix is post PCA.
+        """
+        local_f_matrix = self.f_matrix
+
+
+        if norm_method == 'frobenius':
+            def frob(x):
+                cov = x.corr()
+                norm = scipy.linalg.norm(cov)
+                return norm
+            metric = local_f_matrix.groupby('date').apply(lambda x: frob(x))
+
+        elif norm_method == 'determinant':
+            def det(x):
+                cov = x.corr()
+                det_ = np.linalg.det(cov)
+                return det_
+            metric = local_f_matrix.groupby('date').apply(lambda x: det(x))
+        elif norm_method == 'cond_n':
+            a = 1
+        
+        metric = pd.DataFrame(metric).reset_index()
+
+        # select outlier epochs looking at metric dataframe:
+        if out_method == 'zscore':
+            idx = detect_outliers_zscore(metric)
+            pdb.set_trace()
+        
+        dates = metric.loc[idx, 'date']
+        if np.sum(idx) == 0:
+            outliers_flag = False
+        else:
+            outliers_flag = True
+        return dates, outliers_flag
 
     def pca(self):
         """
@@ -173,22 +207,18 @@ class Data:
         f_pca = pd.DataFrame()
         f_pca['date'] = self.f_matrix['date'] 
         f_pca[self.f_matrix.columns[1:]] = np.nan
-        f_pca["metric_cov_mat"] = np.nan
                     
         epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
         for epoch in tqdm(epochs): # infering on principal axis learnt on entire moons to a single moon
             daily = self.f_matrix[self.f_matrix['date'] ==  epoch][self.f_matrix.columns[1:]] 
             daily_pca = pca.transform(daily)
             f_pca.loc[f_pca['date'] ==  epoch, self.f_matrix.columns[1:]] = daily_pca
-            daily_cov_mat = np.cov(daily_pca.T)
-            metric_cov_mat = np.linalg.det(daily_cov_mat) # metric(cov_matrix)--> det
-            f_pca.loc[f_pca['date'] ==  epoch, ["metric_cov_mat"]] = metric_cov_mat
 
 
-        # pdb.set_trace()
+        #pdb.set_trace()
         # # covrainace matrix after pca here? --> make df: n_moons*features ... extra column with metric(covariance_matrix) 
 
-        self.f_matrix_with_cov_scores = f_pca
+        self.f_matrix = f_pca
 
         return 0
 
