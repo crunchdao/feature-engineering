@@ -8,3 +8,42 @@ Outlier:
 1. ZSCORE on: std, skewness, kurtosis --> intersection univariate sense done:
 2. ZSCORE on: std, skewness, kurtosis --> intersection multivariate sense done:
 3. Q How to select which  feature is bad? --> see the intersection?
+
+
+
+
+Given :dataset 1 dataframe: of n_moons * n_features(std, skewness, kurtosis)
+       dataset2: dataframe: of n_moons * n_features --> covariance matrix plots ---> 
+
+
+-------> lets label outliers based on the covariance matrix score?--> then use nn based training?
+
+
+method1 --> supervised learning
+dataset: 2
+moon==1 ------> outlier == 0 (metric(covariance matrix) < delta)
+metric(covariance matrix) --> 
+row 1
+row 2
+
+moon==2 ------> outlier == 1 (metric(covariance matrix)> delta)
+dataset: 1
+method 2 ---> unsupervised:
+clustering based:
+metric(moon dataframe) = zscore ---> already done 
+metric(moon dataframe) ? can think of anything better?--> cluster
+
+
+---------------------------
+ data--> kerel space data --> pca on dataframe f_matrix_kernel_space --> pca inference on dataframe n_moons * n_features --> moon_index to drop metric(covariance matrix)--> f_matrix_new = f_matrix[~moon_index] --> new kernel spcae and continue
+
+#The covraiance matrix heat map you showed was: the cov matrix of the moon features after PCA(principal axis on entire moons)?
+# lets have 4 types of f_matrix:
+    a) f_matrix
+    b) f_matrix_1st_gaussianization = gaussianize(f_matrix)
+    c) f_matrix_removed_outlier = f_matrix_1st_gaussianization[metric(cov_matrix_moon) < delta]
+    d) f_matrix_without_outlier = f_matrix[f_matrix_removed_outlier["moons"]]
+    e) f_matrix_2nd_gaussianization = gaussianize(f_matrixrix_without_outlier)
+
+Q why not drop some dimensions after PCA in 1st kernel space? --> later f_matrix_without_outlier  will have all the features
+# PCA --> only after gaussianization -->

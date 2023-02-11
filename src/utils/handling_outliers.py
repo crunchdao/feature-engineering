@@ -87,3 +87,4 @@ def detect_outliers_quantile(df, multiplier=1.5):
     return outliers_idx
 
 
+

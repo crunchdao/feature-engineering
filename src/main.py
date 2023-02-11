@@ -7,6 +7,7 @@ from class_ import Data
 from utils.quantization import quantize
 from targets import tg_process
 from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore, detect_outliers_zscore_multivariate
+import pdb as pdb
 
 def get_data():
     """
@@ -112,5 +113,59 @@ def main(gd=True):
     # Plot dist
     data.plot_dist(data.f_matrix, fig_name= "check5_dist", ndist=100, gbell=False)
 
+def test_main():
+    print("----------Targets quantization start --------------------------------")
+    targets = pd.read_parquet("./data/target.parquet")
+    targets = tg_process(targets)
+    print(targets.head())
+    print(targets.describe())
+    print("----------Targets quantization done--------------------------------")
+
+    f_matrix = pd.read_parquet("./data/f_matrix.parquet")
+    b_matrix = pd.read_parquet("./data/b_matrix.parquet")
+
+
+    data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
+    data.plot_dist(targets, fig_name= "check_tg_dist", ndist=100, gbell=False)
+
+    print("----------Data reading done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data orthogonalization start --------------------------------")
+    data.orthogonalize()
+    print("----------Data orthogonalization done --------------------------------")
+
+    
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data Gaussianize start --------------------------------")
+    data.gaussianize()
+    print("----------Data Gaussianize done --------------------------------")
+
+
+    
+    print(data.f_matrix.head(), data.exposure().head())
+    print("----------Data Orthogonalization start --------------------------------")
+    data.orthogonalize()
+    print("----------Data Orthogonalization done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+    
+    print("----------Data standarization start --------------------------------")
+    data.standardize()
+    print("----------Data standarization done --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+
+    # PCA 
+    print("----------PCA on f_matrix start --------------------------------")
+    data.pca()
+    print("----------PCA on f_matrix end --------------------------------")
+    print(data.f_matrix.head(), data.exposure().head())
+
+    # outiler dropping --------------------------------
+    """
+    
+    """
+
 if __name__ == '__main__':
-    main(gd = False)
+    #main(gd = False)
+    test_main()
