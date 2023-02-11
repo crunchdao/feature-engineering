@@ -181,17 +181,21 @@ class Data:
                 return det_
             metric = local_f_matrix.groupby('date').apply(lambda x: det(x))
         elif norm_method == 'cond_n':
-            a = 1
-        
+            def cond_n(x):
+                cov = x.corr()
+                cond = np.linalg.cond(corr)
+                return cond
+            metric = local_f_matrix.groupby('date').apply(lambda x: cond_n(x))
+
         metric = pd.DataFrame(metric).reset_index()
 
         # select outlier epochs looking at metric dataframe:
         if out_method == 'zscore':
             idx = detect_outliers_zscore(metric)
-            pdb.set_trace()
+        # Currently supporting only zscore.
         
         dates = metric.loc[idx, 'date']
-        if np.sum(idx) == 0:
+        if idx.sum() == 0:
             outliers_flag = False
         else:
             outliers_flag = True

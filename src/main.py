@@ -45,51 +45,58 @@ def main(gd=True):
     data.orthogonalize()
     print("----------Data orthogonalization done --------------------------------")
 
-    print("----------Checking outlier-----------------------------------")
-    print("Total_indices", len(data.f_matrix))
-    print("outlier_based_on_Zscore",detect_outliers_zscore(data.f_matrix, threshold=3.0).sum())
-    print("outlier_based_on_Zscore_multivariate",detect_outliers_zscore_multivariate(data.f_matrix, threshold=3.0))
-    print("outlier_based_on_quantile",detect_outliers_quantile(data.f_matrix, multiplier=1.5).sum())
-    print("----------Checking outlier done-----------------------------------" )
-
     # Plot corr
     data.plot_corr(data.f_matrix, fig_name= "check1_corr")
     # Plot dist
     data.plot_dist(data.f_matrix, fig_name= "check1_dist")
     
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data Gaussianize start --------------------------------")
-    data.gaussianize()
-    print("----------Data Gaussianize done --------------------------------")
-    
-    # Plot corr
-    data.plot_corr(data.f_matrix, fig_name= "check2_corr")
-    # Plot dist
-    data.plot_dist(data.f_matrix, fig_name= "check2_dist")
-    
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data Orthogonalization start --------------------------------")
-    data.orthogonalize()
-    print("----------Data Orthogonalization done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
+    f_matrix_o = data.f_matrix.copy()
+    outliers_flag = True
+    while outliers_flag:
+        print(data.f_matrix.head(), data.exposure().head())
+        print("----------Data Gaussianize start --------------------------------")
+        data.gaussianize()
+        print("----------Data Gaussianize done --------------------------------")
+        
+        # Plot corr
+        data.plot_corr(data.f_matrix, fig_name= "check2_corr")
+        # Plot dist
+        data.plot_dist(data.f_matrix, fig_name= "check2_dist")
+        
+        print(data.f_matrix.head(), data.exposure().head())
+        print("----------Data Orthogonalization start --------------------------------")
+        data.orthogonalize()
+        print("----------Data Orthogonalization done --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
 
-    # Plot corr
-    data.plot_corr(data.f_matrix, fig_name= "check3_corr")
-    # Plot dist
-    data.plot_dist(data.f_matrix, fig_name= "check3_dist")
-    
-    print("----------Data standarization start --------------------------------")
-    data.standardize()
-    print("----------Data standarization done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
+        # Plot corr
+        data.plot_corr(data.f_matrix, fig_name= "check3_corr")
+        # Plot dist
+        data.plot_dist(data.f_matrix, fig_name= "check3_dist")
+        
+        print("----------Data standarization start --------------------------------")
+        data.standardize()
+        print("----------Data standarization done --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
 
+        # PCA 
+        print("----------PCA on f_matrix start --------------------------------")
+        data.pca()
+        print("----------PCA on f_matrix end --------------------------------")
+        print(data.f_matrix.head(), data.exposure().head())
+        
+        # Outliers
+        print("----------Outlier detection on f_matrix start --------------------------------")
+        dates, outliers_flag = data.detect_outlier_moons()
+        print("----------Outlier detection on f_matrix end --------------------------------")
 
-    # PCA 
-    print("----------PCA on f_matrix start --------------------------------")
-    data.pca()
-    print("----------PCA on f_matrix end --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-    
+        if outliers_flag:
+            f_matrix_o.drop(f_matrix_o.index[f_matrix_o['date'].isin(dates)], inplace=True)
+            
+            data.f_matrix = f_matrix_o
+            data.b_matrix.drop(b_matrix.index[b_matrix['date'].isin(dates)], inplace=True)
+        else:
+            break
     
 
     print("----------standarize start--------------------------------")
@@ -113,71 +120,5 @@ def main(gd=True):
     # Plot dist
     data.plot_dist(data.f_matrix, fig_name= "check5_dist", ndist=100, gbell=False)
 
-def test_main():
-    print("----------Targets quantization start --------------------------------")
-    targets = pd.read_parquet("./data/target.parquet")
-    targets = tg_process(targets)
-    print(targets.head())
-    print(targets.describe())
-    print("----------Targets quantization done--------------------------------")
-
-    f_matrix = pd.read_parquet("./data/f_matrix.parquet")
-    b_matrix = pd.read_parquet("./data/b_matrix.parquet")
-
-
-    data = Data(f_matrix = f_matrix, b_matrix = b_matrix)
-    data.plot_dist(targets, fig_name= "check_tg_dist", ndist=100, gbell=False)
-
-    print("----------Data reading done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data orthogonalization start --------------------------------")
-    data.orthogonalize()
-    print("----------Data orthogonalization done --------------------------------")
-
-    f_matrix_o = f_matrix.copy()
-    outliers_flag = True
-    while outliers_flag:
-        print(data.f_matrix.head(), data.exposure().head())
-        print("----------Data Gaussianize start --------------------------------")
-        data.gaussianize()
-        print("----------Data Gaussianize done --------------------------------")
-
-
-        
-        print(data.f_matrix.head(), data.exposure().head())
-        print("----------Data Orthogonalization start --------------------------------")
-        data.orthogonalize()
-        print("----------Data Orthogonalization done --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
-
-        
-        print("----------Data standarization start --------------------------------")
-        data.standardize()
-        print("----------Data standarization done --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
-
-        # PCA 
-        print("----------PCA on f_matrix start --------------------------------")
-        data.pca()
-        print("----------PCA on f_matrix end --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
-
-        print("----------Outlier detection on f_matrix start --------------------------------")
-        dates, outliers_flag = data.detect_outlier_moons()
-        print("----------Outlier detection on f_matrix end --------------------------------")
-
-        f_matrix_o.drop(f_matrix_o.index[f_matrix_o['date'].isin(dates)], inplace=True)
-
-        if outliers_flag:
-            data.f_matrix = f_matrix_o
-            # Also update b matrix to match the dates of the new f_matrix.
-        else:
-            break
-    
-    # standardize
-    # quantize
-    #.
-
 if __name__ == '__main__':
-    #main(gd = False)
-    test_main()
+    main(gd = False)
