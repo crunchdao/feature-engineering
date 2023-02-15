@@ -159,13 +159,13 @@ class Data:
         """
         returns : updates f_matrix(nd) --> f_matrix(nd)
         """
-        pca = PCA(n_components=len(self.f_matrix.columns[1:]))
+        pca = PCA(n_components=0.95)
         pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
 
         f_pca = pd.DataFrame()
         f_pca['date'] = self.f_matrix['date']
         f_pca[self.f_matrix.columns[1:]] = np.nan
-                    
+
         epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
         for epoch in tqdm(epochs):
             daily = self.f_matrix[self.f_matrix['date'] ==  epoch][self.f_matrix.columns[1:]]
