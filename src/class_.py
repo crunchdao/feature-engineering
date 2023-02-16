@@ -231,34 +231,26 @@ class Data:
         pca = PCA(n_components=len(self.f_matrix.columns[1:]))
         pca.fit(self.f_matrix[self.f_matrix.columns[1:]])  # learnt on all moons
 
+        pca = PCA(n_components=0.9)
+        pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
+        print(pca.explained_variance_ratio_.cumsum())
+
         f_pca = pd.DataFrame()
         f_pca["date"] = self.f_matrix["date"]
-        f_pca[self.f_matrix.columns[1:]] = np.nan
+        f_pca[
+            self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1]
+        ] = np.nan
 
-        epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
-        for epoch in tqdm(
-            epochs
-        ):  # infering on principal axis learnt on entire moons to a single moon
+        for epoch in tqdm(epochs):
             daily = self.f_matrix[self.f_matrix["date"] == epoch][
                 self.f_matrix.columns[1:]
             ]
             daily_pca = pca.transform(daily)
             f_pca.loc[f_pca["date"] == epoch, self.f_matrix.columns[1:]] = daily_pca
 
-        # pdb.set_trace()
-        # # covrainace matrix after pca here? --> make df: n_moons*features ... extra column with metric(covariance_matrix)
-
         self.f_matrix = f_pca
 
         return 0
-
-    # def outlier_kernel_space(self.f_matrix_with_cov_scores ):
-    #     """Drops outlier moons in kernel space and retur
-
-    #     """
-
-    #     df = self.f_matrix_with_cov_scores["date", "metric_cov_mat"]
-    #     df = df.loc[df["date"].unique()]
 
     def quantizer(self):
         """
