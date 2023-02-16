@@ -261,10 +261,14 @@ class Data:
         """
         bins = [0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
         if rank:
-            quant = self.f_matrix.groupby("date", group_keys=False).transform(lambda x: hard_quantize(x.rank(pct=True, method="first"), bins))
+            quant = self.f_matrix.groupby("date", group_keys=False).transform(
+                lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)
+            )
         else:
-            quant = self.f_matrix.groupby("date", group_keys=False).transform(lambda x: hard_quantize(x, bins))
-            
+            quant = self.f_matrix.groupby("date", group_keys=False).transform(
+                lambda x: hard_quantize(x, bins)
+            )
+
         self.f_matrix = pd.concat([self.f_matrix["date"], quant], axis=1)
         return 0
 
