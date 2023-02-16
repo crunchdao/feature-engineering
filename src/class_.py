@@ -187,7 +187,7 @@ class Data:
         if norm_method == "frobenius":
 
             def frob(x):
-                cov = x.corr()
+                cov = x.corr(numeric_only=True)
                 norm = scipy.linalg.norm(cov)
                 return norm
 
@@ -196,7 +196,7 @@ class Data:
         elif norm_method == "determinant":
 
             def det(x):
-                cov = x.corr()
+                cov = x.corr(numeric_only=True)
                 det_ = np.linalg.det(cov)
                 return det_
 
@@ -204,7 +204,7 @@ class Data:
         elif norm_method == "cond_n":
 
             def cond_n(x):
-                cov = x.corr()
+                cov = x.corr(numeric_only=True)
                 cond = np.linalg.cond(cov)
                 return cond
 
@@ -233,7 +233,6 @@ class Data:
 
         pca = PCA(n_components=0.9)
         pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
-        print(pca.explained_variance_ratio_.cumsum())
 
         f_pca = pd.DataFrame()
         f_pca["date"] = self.f_matrix["date"]
@@ -246,7 +245,10 @@ class Data:
                 self.f_matrix.columns[1:]
             ]
             daily_pca = pca.transform(daily)
-            f_pca.loc[f_pca["date"] == epoch, self.f_matrix.columns[1:]] = daily_pca
+            f_pca.loc[
+                f_pca["date"] == epoch,
+                self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1],
+            ] = daily_pca
 
         self.f_matrix = f_pca
 
