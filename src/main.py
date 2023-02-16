@@ -94,9 +94,8 @@ def main(gd=True):
         )
         dates, outliers_flag = data.detect_outlier_moons()
         print(
-            "----------Outlier detection on f_matrix end --------------------------------"
+            f"----------Outlier detection on f_matrix end, {dates.count()} outliers detected. --------------------------------"
         )
-
         if outliers_flag:
             f_matrix_o.drop(
                 f_matrix_o.index[f_matrix_o["date"].isin(dates)], inplace=True
