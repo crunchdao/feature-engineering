@@ -228,8 +228,8 @@ class Data:
         """
         returns : updates f_matrix(nd) --> f_matrix(nd)
         """
-        pca = PCA(n_components=len(self.f_matrix.columns[1:]))
-        pca.fit(self.f_matrix[self.f_matrix.columns[1:]])  # learnt on all moons
+
+        epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
 
         pca = PCA(n_components=0.9)
         pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
