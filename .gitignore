@@ -620,3 +620,6 @@ MigrationBackup/
 .ipynb_checkpoints
 *.parquet
 *.csv
+*.png
+*.gz
+venv/

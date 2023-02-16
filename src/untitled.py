@@ -1,7 +1,8 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import scipy.stats as stats
-from class_ import  Data
+
+from class_ import Data
 
 f_matrix = pd.read_parquet("../data/f_matrix.parquet")
 b_matrix = pd.read_parquet("../data/f_matrix.parquet")

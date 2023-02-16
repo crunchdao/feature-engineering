@@ -1,10 +1,7 @@
-
-from pyod.utils.data import generate_data
-from pyod.utils.data import evaluate_print
-
-from pyod.models.vae import VAE
 import pdb
 
+from pyod.models.vae import VAE
+from pyod.utils.data import evaluate_print, generate_data
 
 contamination = 0.1  # percentage of outliers
 n_train = 20000  # number of training points
@@ -12,21 +9,22 @@ n_test = 2000  # number of testing points
 n_features = 300  # number of features
 
 # Generate sample data
-X_train, X_test, y_train, y_test = \
-    generate_data(n_train=n_train,
-                    n_test=n_test,
-                    n_features=n_features,
-                    contamination=contamination,
-                    random_state=42)
+X_train, X_test, y_train, y_test = generate_data(
+    n_train=n_train,
+    n_test=n_test,
+    n_features=n_features,
+    contamination=contamination,
+    random_state=42,
+)
 
-#x_train: can be like our f_matrix
+# x_train: can be like our f_matrix
 # y_train: array([0., 0., 0., ..., 1., 1., 1.])
 
-#X_train.shape--> (20000, 300), y_train.shape --> (20000,)
-#X_test.shape--> (2000, 300), y_test.shape --> (2000,)
+# X_train.shape--> (20000, 300), y_train.shape --> (20000,)
+# X_test.shape--> (2000, 300), y_test.shape --> (2000,)
 
 # train VAE detector (Beta-VAE)
-clf_name = 'VAE'
+clf_name = "VAE"
 clf = VAE(epochs=30, contamination=contamination, gamma=0.8, capacity=0.2)
 clf.fit(X_train)
 
