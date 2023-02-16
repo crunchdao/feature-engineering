@@ -11,7 +11,6 @@ from utils import gauss
 from utils.quantization import hard_quantize
 
 class Data:
-
     def __init__(self, f_matrix, b_matrix ):
         """
         f_matrix:   features.parquet
@@ -159,18 +158,20 @@ class Data:
         """
         returns : updates f_matrix(nd) --> f_matrix(nd)
         """
-        pca = PCA(n_components=0.95)
-        pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
+        epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
 
+        pca = PCA(n_components=0.9)
+        pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
+        print(pca.explained_variance_ratio_.cumsum())
+        
         f_pca = pd.DataFrame()
         f_pca['date'] = self.f_matrix['date']
-        f_pca[self.f_matrix.columns[1:]] = np.nan
+        f_pca[self.f_matrix.columns[1:len(pca.explained_variance_ratio_)+1]] = np.nan
 
-        epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
         for epoch in tqdm(epochs):
             daily = self.f_matrix[self.f_matrix['date'] ==  epoch][self.f_matrix.columns[1:]]
             daily_pca = pca.transform(daily)
-            f_pca.loc[f_pca['date'] ==  epoch, self.f_matrix.columns[1:]] = daily_pca
+            f_pca.loc[f_pca['date'] ==  epoch, self.f_matrix.columns[1:len(pca.explained_variance_ratio_)+1]] = daily_pca
 
         self.f_matrix = f_pca
 
