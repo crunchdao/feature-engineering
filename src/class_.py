@@ -144,16 +144,14 @@ class Data:
 
             def moments(x, col):
                 f_local_epoch = x[col]
-                mn = f_local_epoch.mean()
                 std = f_local_epoch.std()
-                skew = scipy.stats.skew(f_local_epoch)
                 kurt = scipy.stats.kurtosis(f_local_epoch)
-                moments = {"mean": [mn], "std": [std], "skew": [skew], "kurt": [kurt]}
+                moments = {"std": [std], "kurt": [kurt]}
                 return pd.DataFrame(moments)
 
             moments = f_local.groupby("date").apply(lambda x: moments(x, col))
             moments_array = np.array(moments)
-            median_moments = np.median(moments_array, axis=0)  # 4D
+            median_moments = np.median(moments_array, axis=0)
             distance_moments = []
             for i in range(moments_array.shape[0]):
                 moments_array[i, :] -= median_moments
@@ -172,10 +170,9 @@ class Data:
                 x.loc[:, col] = np.squeeze(y)
                 return x
 
-            self.f_matrix_1st_gaussianization = self.f_matrix.copy()
-            self.f_matrix_1st_gaussianization.loc[:, col] = f_local.groupby(
-                "date", group_keys=False
-            ).apply(lambda x: apply_kernel(x, col))
+            self.f_matrix.loc[:, col] = f_local.groupby("date", group_keys=False).apply(
+                lambda x: apply_kernel(x, col)
+            )
         return 0
 
     def detect_outlier_moons(self, norm_method="frobenius", out_method="zscore"):

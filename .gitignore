@@ -623,3 +623,4 @@ MigrationBackup/
 *.png
 *.gz
 venv/
+.ipynb
