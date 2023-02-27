@@ -221,14 +221,14 @@ class Data:
             outliers_flag = True
         return dates, outliers_flag
 
-    def pca(self):
+    def pca(self, n_components=0.9):
         """
         returns : updates f_matrix(nd) --> f_matrix(nd)
         """
 
         epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
 
-        pca = PCA(n_components=0.9)
+        pca = PCA(n_components=n_components)
         pca.fit(self.f_matrix[self.f_matrix.columns[1:]])
 
         f_pca = pd.DataFrame()
