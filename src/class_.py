@@ -14,9 +14,9 @@ import pdb as pdb
 import scipy.stats as stats
 from sklearn.decomposition import PCA
 
-from utils import gauss
-from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
-from utils.quantization import hard_quantize
+from utils_feat import gauss
+from utils_feat.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
+from utils_feat.quantization import hard_quantize
 
 
 class Data:
