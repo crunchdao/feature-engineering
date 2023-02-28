@@ -15,6 +15,6 @@ setup(name='feature_engg_cdao',
       author='Utkarsh - Matteo',
       author_email='utkarshp1161@gmail.com',
       license='MIT',
-      packages=['src'],
+      packages=['fenggi'],
       install_requires=REQUIREMENTS,
       )

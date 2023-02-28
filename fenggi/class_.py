@@ -8,11 +8,11 @@ from tqdm import tqdm
 from tqdm.notebook import tqdm
 tqdm.pandas()
 from sklearn.decomposition import PCA
-from utils import gauss
-from utils.quantization import hard_quantize
+from .utils import gauss
+from .utils.quantization import hard_quantize
 import scipy.stats as stats
 import pdb as pdb
-from utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
+from .utils.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
 
 class Data:
 
