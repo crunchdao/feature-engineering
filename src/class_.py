@@ -143,7 +143,7 @@ class Data:
 
         f_local = self.f_matrix.copy()
         for col in tqdm(f_local.columns[1:]):
-            gauss_kernel = gauss.Gaussianize(tol=1e-10, max_iter=2000)
+            gauss_kernel = gauss.Gaussianize()
 
             def moments(x, col):
                 f_local_epoch = x[col]
