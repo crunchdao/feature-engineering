@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Transform data so that it is approximately normally distributed
 
@@ -73,7 +72,7 @@ class Gaussianize(sklearn.base.TransformerMixin):
 
     def __init__(
         self,
-        strategy: Text = "lambert",
+        strategy: str = "lambert",
         tol: float = 1e-5,
         max_iter: int = 100,
         verbose: bool = False,
@@ -138,7 +137,7 @@ class Gaussianize(sklearn.base.TransformerMixin):
             )
 
     def qqplot(
-        self, x: np.ndarray[float, Any], prefix: Text = "qq", output_dir: Text = "/tmp/"
+        self, x: np.ndarray[float, Any], prefix: str = "qq", output_dir: str = "/tmp/"
     ) -> None:
         """Show qq plots compared to normal before and after the transform."""
         x = _update_x(x)

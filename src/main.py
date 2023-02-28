@@ -6,12 +6,12 @@ import pandas as pd
 
 from class_ import Data
 from targets import tg_process
-from utils.handling_outliers import (
+from utils_feat.handling_outliers import (
     detect_outliers_quantile,
     detect_outliers_zscore,
     detect_outliers_zscore_multivariate,
 )
-from utils.quantization import quantize
+from utils_feat.quantization import quantize
 
 
 def get_data():

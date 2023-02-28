@@ -42,7 +42,7 @@ def MSE_loss(x, x_hat_q):
     return MSE
 
 
-class LloydMaxQuantizer(object):
+class LloydMaxQuantizer:
     """A class for iterative Lloyd Max quantizer.
     This quantizer is created to minimize amount SNR between the orginal signal
     and quantized signal.
