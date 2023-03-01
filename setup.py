@@ -8,14 +8,15 @@ REQUIREMENTS = ['numpy', 'pandas', 'seaborn', 'scipy', 'tqdm', 'pyarrow', 'sciki
 
   
 # calling the setup function 
-setup(name='fenggi',
+setup(name='fengi',
       version='0.0.1',
       description='feature engineering',
       url='https://github.com/crunchdao/feature-engineering',
       author='Utkarsh - Matteo',
       author_email='utkarshp1161@gmail.com',
       license='MIT',
-      #package_dir={"": "src"},
-      packages=find_packages(include=["fenggi", "fenggi.*"]),
+      package_dir={"": "src"},
+      #packages=find_packages(include=["fengi.src", "fengi.src.*"]),
+      packages=find_packages(where="src"),
       install_requires=REQUIREMENTS,
       )
