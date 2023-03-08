@@ -6,7 +6,7 @@ import scipy
 from utils_feat.quantization import hard_quantize, quantize
 
 
-def tg_process(tg):
+def tg_process(tg, rank=False):
 
     targets = tg.drop("date", axis=1).columns
     epochs = tg["date"].unique()
@@ -54,11 +54,19 @@ def tg_process(tg):
             bins[i + 1] += bins[i]
         bins[-1] = 1
 
-        quant = (
-            tg[["date", target]]
-            .groupby("date", group_keys=False)
-            .transform(lambda x: hard_quantize(x, bins))
-        )
+        if rank:
+            quant = (
+                tg[["date", target]]
+                .groupby("date", group_keys=False)
+                .transform(lambda x: hard_quantize(x.rank(pct=True, method="first"), bins))
+            )
+        else:
+            quant = (
+                tg[["date", target]]
+                .groupby("date", group_keys=False)
+                .transform(lambda x: hard_quantize(x, bins))
+            )
+
         tg_out = pd.concat([tg_out, quant], axis=1)
 
     return tg_out
