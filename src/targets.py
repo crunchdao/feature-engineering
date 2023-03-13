@@ -54,11 +54,14 @@ def tg_process(tg, rank=False):
             bins[i + 1] += bins[i]
         bins[-1] = 1
 
+        print(bins)
         if rank:
             quant = (
                 tg[["date", target]]
                 .groupby("date", group_keys=False)
-                .transform(lambda x: hard_quantize(x.rank(pct=True, method="first"), bins))
+                .transform(
+                    lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)
+                )
             )
         else:
             quant = (
