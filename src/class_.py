@@ -119,6 +119,7 @@ class Data:
         """ """
 
         def loc_orthogonalize(f_mat_temp):
+            print(f'Epoch: {f_mat_temp["date"].iloc[0]}')
             features = f_mat_temp.columns[1:]
             b_mat_temp = self.b_matrix.loc[
                 self.b_matrix["date"].isin(f_mat_temp["date"]),
@@ -143,32 +144,10 @@ class Data:
 
         f_local = self.f_matrix.copy()
         for col in tqdm(f_local.columns[1:]):
-            gauss_kernel = gauss.Gaussianize()
-
-            def moments(x, col):
-                f_local_epoch = x[col]
-                std = f_local_epoch.std()
-                kurt = scipy.stats.kurtosis(f_local_epoch)
-                moments = {"std": [std], "kurt": [kurt]}
-                return pd.DataFrame(moments)
-
-            moments = f_local.groupby("date").apply(lambda x: moments(x, col))
-            moments_array = np.array(moments)
-            median_moments = np.median(moments_array, axis=0)
-            distance_moments = []
-            for i in range(moments_array.shape[0]):
-                moments_array[i, :] -= median_moments
-                distance_moments.append(np.linalg.norm(moments_array[i, :]))
-            distance_moments_array = np.array(distance_moments)
-            train_sample = f_local[
-                f_local["date"]
-                == f_local["date"].unique()[distance_moments_array.argmin()]
-            ][col].to_numpy()
-
-            # Gaussianize
-            gauss_kernel.fit(train_sample, y=None)
 
             def apply_kernel(x, col):
+                gauss_kernel = gauss.Gaussianize()
+                gauss_kernel.fit(x[col], y=None)
                 y = gauss_kernel.transform(x[col])
                 x.loc[:, col] = np.squeeze(y)
                 return x
