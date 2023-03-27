@@ -124,7 +124,6 @@ class LloydMaxQuantizer:
 
 
 def quantize(x):
-
     bits = 7
     iterations = 10
 

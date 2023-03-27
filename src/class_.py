@@ -72,7 +72,6 @@ class Data:
         return 0
 
     def plot_dist(self, data, fig_name, ndist=600, gbell=True):
-
         Path("./paper/figures/").mkdir(parents=True, exist_ok=True)
 
         for col in data.columns[1:]:
@@ -140,7 +139,6 @@ class Data:
         return 0
 
     def gaussianize(self):
-
         f_local = self.f_matrix.copy()
         for col in tqdm(f_local.columns[1:]):
 
@@ -240,7 +238,7 @@ class Data:
         binsizes = np.array(binsizes)
         complementaries = 1 - binsizes[:-1]
         bins = list(np.append(np.append(binsizes, complement[::-1]), 1))
-        
+
         if rank:
             quant = self.f_matrix.groupby("date", group_keys=False).transform(
                 lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)

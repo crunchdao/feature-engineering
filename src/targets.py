@@ -7,7 +7,6 @@ from utils_feat.quantization import hard_quantize, quantize
 
 
 def tg_process(tg, rank=False):
-
     targets = tg.drop("date", axis=1).columns
     epochs = tg["date"].unique()
     tg_out = pd.DataFrame()
