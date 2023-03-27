@@ -9,7 +9,6 @@ from tqdm import tqdm
 from tqdm.notebook import tqdm
 
 tqdm.pandas()
-import pdb as pdb
 
 import scipy.stats as stats
 from sklearn.decomposition import PCA
@@ -233,12 +232,15 @@ class Data:
 
         return 0
 
-    def quantizer(self, rank=False):
+    def quantizer(self, rank=False, binsizes=[0.0325, 0.1465, 0.365, 0.635]):
         """
         Returns: updated f_matrix after quantization
 
         """
-        bins = [0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
+        binsizes = np.array(binsizes)
+        complementaries = 1 - binsizes[:-1]
+        bins = list(np.append(np.append(binsizes, complement[::-1]), 1))
+        
         if rank:
             quant = self.f_matrix.groupby("date", group_keys=False).transform(
                 lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)
