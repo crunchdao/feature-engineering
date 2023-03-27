@@ -1,6 +1,5 @@
 """Tests for hello function."""
 import pytest
-
 from src.example import hello
 
 
