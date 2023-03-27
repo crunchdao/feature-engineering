@@ -1,6 +1,7 @@
 """Tests for hello function."""
 import pytest
-from src.example import hello
+
+from fengi.example import hello
 
 
 @pytest.mark.parametrize(
