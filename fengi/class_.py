@@ -230,14 +230,13 @@ class Data:
 
         return 0
 
-    def quantizer(self, rank=False, binsizes=[0.0325, 0.1465, 0.365, 0.635]):
+    def quantizer(
+        self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
+    ):
         """
         Returns: updated f_matrix after quantization
 
         """
-        binsizes = np.array(binsizes)
-        complementaries = 1 - binsizes[:-1]
-        bins = list(np.append(np.append(binsizes, complementaries[::-1]), 1))
 
         if rank:
             quant = self.f_matrix.groupby("date", group_keys=False).transform(
