@@ -237,7 +237,7 @@ class Data:
         """
         binsizes = np.array(binsizes)
         complementaries = 1 - binsizes[:-1]
-        bins = list(np.append(np.append(binsizes, complement[::-1]), 1))
+        bins = list(np.append(np.append(binsizes, complementaries[::-1]), 1))
 
         if rank:
             quant = self.f_matrix.groupby("date", group_keys=False).transform(
