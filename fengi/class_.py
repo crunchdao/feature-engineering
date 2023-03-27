@@ -12,7 +12,6 @@ tqdm.pandas()
 
 import scipy.stats as stats
 from sklearn.decomposition import PCA
-
 from utils_feat import gauss
 from utils_feat.handling_outliers import (
     detect_outliers_quantile,

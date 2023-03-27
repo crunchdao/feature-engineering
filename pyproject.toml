@@ -12,6 +12,9 @@ authors = ["CrunchDAO"]
 license = "."
 repository = "https://github.com/crunchdao/feature-engineering"
 homepage = "https://github.com/crunchdao/feature-engineering"
+packages = [
+    { include = "fengi" },
+]
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = []  #! Update me
