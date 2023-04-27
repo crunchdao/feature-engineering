@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-
 from utils_feat.quantization import hard_quantize, quantize
 
 
