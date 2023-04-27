@@ -123,8 +123,7 @@ class LloydMaxQuantizer:
         return x_hat_q
 
 
-def quantize(x):
-    bits = 7
+def quantize(x, bits=7):
     iterations = 10
 
     repre = LloydMaxQuantizer.start_repre(x, bits)

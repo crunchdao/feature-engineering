@@ -2,11 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
+from utils_feat.quantization import hard_quantize, quantize
 
-from .utils_feat.quantization import hard_quantize, quantize
 
-
-def tg_process(tg, rank=False):
+def tg_process(tg, rank=False, bits=7):
     targets = tg.drop("date", axis=1).columns
     epochs = tg["date"].unique()
     tg_out = pd.DataFrame()
@@ -40,7 +39,7 @@ def tg_process(tg, rank=False):
         train_sample = tg[tg["date"] == epochs[distance_moments.argmin()]][target]
 
         train_sample /= np.std(train_sample)
-        quant_train = quantize(train_sample)
+        quant_train = quantize(train_sample, bits=bits)
 
         bins = []
         for i in np.unique(quant_train):
