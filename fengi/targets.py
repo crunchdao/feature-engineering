@@ -11,6 +11,8 @@ def tg_process(tg, rank=False, bits=7):
     tg_out = pd.DataFrame()
     tg_out["date"] = tg["date"]
     for target in targets:
+        print("-----------------")
+        print(target)
         mn_tg_list = []
         std_tg_list = []
         kurt_tg_list = []
@@ -38,6 +40,7 @@ def tg_process(tg, rank=False, bits=7):
             distance_moments = np.linalg.norm(moments, axis=0)
         train_sample = tg[tg["date"] == epochs[distance_moments.argmin()]][target]
 
+        print(f"Bringing to Std=1 dividing by {np.std(train_sample)}")
         train_sample /= np.std(train_sample)
         quant_train = quantize(train_sample, bits=bits)
 
