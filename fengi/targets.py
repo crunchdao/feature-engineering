@@ -43,6 +43,7 @@ def tg_process(tg, rank=False, bits=7):
         print(f"Bringing to Std=1 dividing by {np.std(train_sample)}")
         train_sample /= np.std(train_sample)
         quant_train = quantize(train_sample, bits=bits)
+        print(f"The unique bits values are: {np.unique(quant_train)}")
 
         bins = []
         for i in np.unique(quant_train):
@@ -55,7 +56,6 @@ def tg_process(tg, rank=False, bits=7):
             bins[i + 1] += bins[i]
         bins[-1] = 1
 
-        print(bins)
         if rank:
             quant = (
                 tg[["date", target]]
