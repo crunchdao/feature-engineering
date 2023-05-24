@@ -19,8 +19,8 @@ poetry-remove:
 #* Installation
 .PHONY: install
 install:
-	python3.9 -m pip install --upgrade pip
-	pip install poetry
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install poetry
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
 	poetry run pre-commit install
