@@ -157,14 +157,7 @@ def quantize(x, bits=7):
 
 
 def hard_quantize(x, bins):
-    quant_index_list = []
-    limit_old = -np.inf
-    for idx, el in enumerate(bins):
-        limit = x.quantile(el)
-        quant_index = (x <= limit) & (x >= limit_old)
-        quant_index_list.append(quant_index)
-        limit_old = limit
-
-    for idx, qi in enumerate(quant_index_list):
-        x.loc[qi] = round(idx / (len(bins) - 1), 2)
+    quantiles = np.quantile(x, bins)
+    quant_index = np.digitize(x, quantiles, right=True)
+    x = np.round((quant_index) / (len(bins) - 1), 2)
     return x
