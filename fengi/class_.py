@@ -114,8 +114,10 @@ class Data:
         return 0
 
     def orthogonalize(self):
-        """ """
-
+        """
+        Cross-sectionally project f to be orthogonal to the subspace spanned by B, 
+        with respect to the dot product, in a least square sense.
+        """
         def loc_orthogonalize(f_mat_temp):
             print(f'Epoch: {f_mat_temp["date"].iloc[0]}')
             features = f_mat_temp.columns[1:]
@@ -124,10 +126,11 @@ class Data:
                 self.b_matrix.columns[1:],
             ]
 
+            b_pinv_temp = np.linalg.pinv(b_mat_temp)
             for feature in features:
                 m = np.array(f_mat_temp[feature])
                 m_parallel = np.dot(
-                    b_mat_temp.to_numpy(), np.dot(np.linalg.pinv(b_mat_temp), m)
+                    b_mat_temp.to_numpy(), np.dot(b_pinv_temp, m)
                 )
                 m -= m_parallel
                 f_mat_temp[feature] = m
