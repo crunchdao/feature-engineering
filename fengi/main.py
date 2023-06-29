@@ -89,22 +89,16 @@ def main(gd=True):
         print(data.f_matrix.head(), data.exposure().head())
 
         # Outliers
-        print(
-            "----------Outlier detection on f_matrix start --------------------------------"
-        )
+        print("----------Outlier detection on f_matrix start --------------------------------")
         dates, outliers_flag = data.detect_outlier_moons()
         print(
             f"----------Outlier detection on f_matrix end, {dates.count()} outliers detected. --------------------------------"
         )
         if outliers_flag:
-            f_matrix_o.drop(
-                f_matrix_o.index[f_matrix_o["date"].isin(dates)], inplace=True
-            )
+            f_matrix_o.drop(f_matrix_o.index[f_matrix_o["date"].isin(dates)], inplace=True)
 
             data.f_matrix = f_matrix_o
-            data.b_matrix.drop(
-                b_matrix.index[b_matrix["date"].isin(dates)], inplace=True
-            )
+            data.b_matrix.drop(b_matrix.index[b_matrix["date"].isin(dates)], inplace=True)
         else:
             break
 
