@@ -21,9 +21,7 @@ def detect_outliers_zscore(df, threshold=3.0):
     for col in cols:
         mean = df[col].mean()
         std = df[col].std()
-        outliers_idx = np.logical_or(
-            outliers_idx, np.abs(df[col] - mean) >= threshold * std
-        )
+        outliers_idx = np.logical_or(outliers_idx, np.abs(df[col] - mean) >= threshold * std)
     return outliers_idx
 
 
@@ -84,7 +82,5 @@ def detect_outliers_quantile(df, multiplier=1.5):
         IQR = Q3 - Q1
         lower_bound = Q1 - multiplier * IQR
         upper_bound = Q3 + multiplier * IQR
-        outliers_idx = np.logical_or(
-            outliers_idx, (df[col] < lower_bound) | (df[col] > upper_bound)
-        )
+        outliers_idx = np.logical_or(outliers_idx, (df[col] < lower_bound) | (df[col] > upper_bound))
     return outliers_idx

@@ -61,9 +61,7 @@ def tg_process(tg, rank=False, bits=7):
             quant = (
                 tg[["date", target]]
                 .groupby("date", group_keys=False)
-                .transform(
-                    lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)
-                )
+                .transform(lambda x: hard_quantize(x.rank(pct=True, method="first"), bins))
             )
         else:
             quant = (

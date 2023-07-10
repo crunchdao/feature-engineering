@@ -114,31 +114,22 @@ class Gaussianize(sklearn.base.TransformerMixin):
         if self.strategy == "lambert":
             return np.array([w_t(x_i, tau_i) for x_i, tau_i in zip(x.T, self.coefs_)]).T
         elif self.strategy == "brute":
-            return np.array(
-                [norm.ppf((rankdata(x_i) - 0.5) / len(x_i)) for x_i in x.T]
-            ).T
+            return np.array([norm.ppf((rankdata(x_i) - 0.5) / len(x_i)) for x_i in x.T]).T
         elif self.strategy == "boxcox":
-            return np.array(
-                [boxcox(x_i, lmbda=lmbda_i) for x_i, lmbda_i in zip(x.T, self.coefs_)]
-            ).T
+            return np.array([boxcox(x_i, lmbda=lmbda_i) for x_i, lmbda_i in zip(x.T, self.coefs_)]).T
         else:
             raise NotImplementedError("stategy='%s' not implemented." % self.strategy)
 
     def inverse_transform(self, y: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
         """Recover original data from Gaussianized data."""
         if self.strategy == "lambert":
-            return np.array(
-                [inverse(y_i, tau_i) for y_i, tau_i in zip(y.T, self.coefs_)]
-            ).T
+            return np.array([inverse(y_i, tau_i) for y_i, tau_i in zip(y.T, self.coefs_)]).T
         else:
             raise NotImplementedError(
-                "Inversion not supported for gaussianization transform '%s'"
-                % self.strategy
+                "Inversion not supported for gaussianization transform '%s'" % self.strategy
             )
 
-    def qqplot(
-        self, x: np.ndarray[float, Any], prefix: str = "qq", output_dir: str = "/tmp/"
-    ) -> None:
+    def qqplot(self, x: np.ndarray[float, Any], prefix: str = "qq", output_dir: str = "/tmp/") -> None:
         """Show qq plots compared to normal before and after the transform."""
         x = _update_x(x)
         y = self.transform(x)
@@ -190,10 +181,7 @@ def igmm(
             break
         else:
             if k == max_iter - 1:
-                warnings.warn(
-                    "Warning: No convergence after %d iterations. Increase max_iter."
-                    % max_iter
-                )
+                warnings.warn("Warning: No convergence after %d iterations. Increase max_iter." % max_iter)
     return tau1
 
 

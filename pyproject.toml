@@ -17,7 +17,7 @@ packages = [
 ]
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = []  #! Update me
+keywords = ['Orthogonality']  #! Update me
 
 # Pypi classifiers: https://pypi.org/classifiers/
 classifiers = [  #! Update me
@@ -30,9 +30,7 @@ classifiers = [  #! Update me
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
-importlib_metadata = {version = "^4.5.0", python = "<3.8"}
-typer = {extras = ["all"], version = "^0.7.0"}
+python = ">=3.9, <3.12"
 pandas = "^1.5.3"
 tqdm = "^4.64.1"
 numpy = "^1.24"
@@ -40,19 +38,15 @@ matplotlib = "^3.6.0"
 seaborn = "^0.12.2"
 scipy = "^1.10.0"
 scikit-learn = "^1.2.1"
-pyarrow = "^11.0.0"
-fastparquet = "^2023.2.0"
+pyarrow = "^12.0.0"
 ipywidgets = "^8.0.2"
 
 [tool.poetry.dev-dependencies]
-bandit = "^1.7.1"
 black = {version = "^23.1", allow-prereleases = true}
-darglint = "^1.8.1"
 isort = {extras = ["colors"], version = "^5.10.1"}
 mypy = "^1.0"
 mypy-extensions = "^0.4.3"
 pre-commit = "^3.1.1"
-pydocstyle = "^6.1.1"
 pylint = "^2.11.1"
 pytest = "^7.2.1"
 pyupgrade = "^2.29.1"
@@ -65,7 +59,7 @@ pytest-cov = "^4.0.0"
 [tool.black]
 # https://github.com/psf/black
 target-version = ["py37"]
-line-length = 88
+line-length = 110
 color = true
 
 exclude = '''
@@ -87,7 +81,7 @@ exclude = '''
 [tool.isort]
 # https://github.com/timothycrosley/isort/
 py_version = 37
-line_length = 88
+line_length = 110
 
 known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
 sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]

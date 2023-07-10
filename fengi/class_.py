@@ -14,10 +14,7 @@ import scipy.stats as stats
 from sklearn.decomposition import PCA
 
 from .utils_feat import gauss
-from .utils_feat.handling_outliers import (
-    detect_outliers_quantile,
-    detect_outliers_zscore,
-)
+from .utils_feat.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
 from .utils_feat.quantization import hard_quantize
 
 
@@ -32,7 +29,7 @@ class Data:
 
     def exposure(self):
         """
-        Returns: the f_exposure (measure of orthogonailty of f_matrix(master) to b_matrix(factors))
+        Returns: the f_exposure, cross-sectional measure of orthogonality of features in f_matrix to subspace spanned by b_matrix.
         """
 
         def loc_exposure(f_mat_temp):
@@ -49,9 +46,7 @@ class Data:
             fact_exp_matrix = np.array(fact_exp_lis)
             return fact_exp_matrix
 
-        f_exp_matrix = self.f_matrix.groupby("date", group_keys=False).apply(
-            lambda x: loc_exposure(x)
-        )
+        f_exp_matrix = self.f_matrix.groupby("date", group_keys=False).apply(lambda x: loc_exposure(x))
         return f_exp_matrix
 
     def plot_corr(self, data, fig_name):
@@ -113,11 +108,12 @@ class Data:
         self.f_matrix = preprocess(self.f_matrix)
         return 0
 
-    def orthogonalize(self):
+    def orthogonalize(self, beta_coeff=0.0):
         """
-        Cross-sectionally project f to be orthogonal to the subspace spanned by B, 
+        Cross-sectionally project f to be orthogonal to the subspace spanned by B,
         with respect to the dot product, in a least square sense.
         """
+
         def loc_orthogonalize(f_mat_temp):
             print(f'Epoch: {f_mat_temp["date"].iloc[0]}')
             features = f_mat_temp.columns[1:]
@@ -129,10 +125,12 @@ class Data:
             b_pinv_temp = np.linalg.pinv(b_mat_temp)
             for feature in features:
                 m = np.array(f_mat_temp[feature])
-                m_parallel = np.dot(
-                    b_mat_temp.to_numpy(), np.dot(b_pinv_temp, m)
-                )
-                m -= m_parallel
+                m_parallel = np.dot(b_mat_temp.to_numpy(), np.dot(b_pinv_temp, m))
+                if beta_coeff > 0:
+                    mean_bf = np.mean(np.dot(b_mat_temp.to_numpy().T, m))
+                    m -= (1 - beta_coeff / mean_bf) * m_parallel
+                else:
+                    m -= m_parallel
                 f_mat_temp[feature] = m
             return f_mat_temp
 
@@ -215,14 +213,10 @@ class Data:
 
         f_pca = pd.DataFrame()
         f_pca["date"] = self.f_matrix["date"]
-        f_pca[
-            self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1]
-        ] = np.nan
+        f_pca[self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1]] = np.nan
 
         for epoch in tqdm(epochs):
-            daily = self.f_matrix[self.f_matrix["date"] == epoch][
-                self.f_matrix.columns[1:]
-            ]
+            daily = self.f_matrix[self.f_matrix["date"] == epoch][self.f_matrix.columns[1:]]
             daily_pca = pca.transform(daily)
             f_pca.loc[
                 f_pca["date"] == epoch,
@@ -233,9 +227,7 @@ class Data:
 
         return 0
 
-    def quantizer(
-        self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
-    ):
+    def quantizer(self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]):
         """
         Returns: updated f_matrix after quantization
 
