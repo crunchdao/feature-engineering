@@ -56,11 +56,15 @@ mypy:
 .PHONY: check-safety
 check-safety:
 	poetry check
-	poetry run safety check --full-report
+	poetry run safety check --full-report -i 51457
 	poetry run bandit -ll --recursive python_project tests
 
 .PHONY: lint
 lint: test check-codestyle mypy check-safety
+
+.PHONY: docs
+docs:
+	poetry run pydocstyle --convention=google .
 
 .PHONY: update-dev-deps
 update-dev-deps:

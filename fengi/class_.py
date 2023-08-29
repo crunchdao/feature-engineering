@@ -1,3 +1,5 @@
+"""Module Name: data_processing_module."""
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -10,7 +12,10 @@ from tqdm.notebook import tqdm
 
 tqdm.pandas()
 
+import os
+
 import scipy.stats as stats
+from pandarallel import pandarallel
 from sklearn.decomposition import PCA
 
 from .utils_feat import gauss
@@ -19,17 +24,24 @@ from .utils_feat.quantization import hard_quantize
 
 
 class Data:
+    """Data processing and analysis class."""
+
     def __init__(self, f_matrix, b_matrix):
-        """
-        f_matrix:   features.parquet
-        b_matrix:   factor_matrix.parquet
+        """Initialize the Data class.
+
+        :param f_matrix: pd.DataFrame
+            Features matrix.
+        :param b_matrix: pd.DataFrame
+            Factor matrix.
         """
         self.f_matrix = f_matrix
         self.b_matrix = b_matrix
 
     def exposure(self):
-        """
-        Returns: the f_exposure, cross-sectional measure of orthogonality of features in f_matrix to subspace spanned by b_matrix.
+        """Calculate the cross-sectional measure of orthogonality of features to given subspace.
+
+        Returns:
+        np.ndarray: Factor exposure matrix.
         """
 
         def loc_exposure(f_mat_temp):
@@ -50,9 +62,15 @@ class Data:
         return f_exp_matrix
 
     def plot_corr(self, data, fig_name):
-        """
-        data: Matrix
+        """Plot correlation heatmaps.
 
+        :param data: pd.DataFrame
+            The data to be used for plotting the correlation heatmap.
+        :param fig_name: str
+            Name for saving the figures.
+
+        :return: int
+            Always returns 0.
         """
         Path("./paper/figures/").mkdir(parents=True, exist_ok=True)
 
@@ -67,6 +85,20 @@ class Data:
         return 0
 
     def plot_dist(self, data, fig_name, ndist=600, gbell=True):
+        """Plot distribution histograms.
+
+        :param data: pd.DataFrame
+            Data matrix for plotting the distribution histograms.
+        :param fig_name: str
+            Name for saving the figures.
+        :param ndist: int, optional
+            Number of bins for histograms. Default is 600.
+        :param gbell: bool, optional
+            Plot Gaussian bell curve. Default is True.
+
+        :return: int
+            Always returns 0.
+        """
         Path("./paper/figures/").mkdir(parents=True, exist_ok=True)
 
         for col in data.columns[1:]:
@@ -84,15 +116,14 @@ class Data:
         return 0
 
     def standardize(self):
-        """
-        return: updates the self.f_matrix to standardised version
+        """Standardize the feature matrix.
+
+        Returns:
+        int: Always returns 0.
         """
 
         def preprocess(local_f_matrix):
-            """
-            get sigma --> median of the std dev list
-
-            """
+            """Get sigma --> median of the std dev list."""
             epochs = local_f_matrix[local_f_matrix.columns[0]].unique()
             for col in tqdm(local_f_matrix.columns[1:]):
                 sigma_list = []
@@ -108,10 +139,14 @@ class Data:
         self.f_matrix = preprocess(self.f_matrix)
         return 0
 
-    def orthogonalize(self, beta_coeff=0.0):
-        """
-        Cross-sectionally project f to be orthogonal to the subspace spanned by B,
-        with respect to the dot product, in a least square sense.
+    def orthogonalize(self, beta_coeff=0.0, nb_workers=None):
+        """Cross-sectionally project f to be orthogonal to the subspace spanned by B, with respect to the dot product, in a least square sense.
+
+        :param beta_coeff: float
+            Coefficient for adjusting projection.
+
+        :return: int
+            Always returns 0.
         """
 
         def loc_orthogonalize(f_mat_temp):
@@ -134,12 +169,30 @@ class Data:
                 f_mat_temp[feature] = m
             return f_mat_temp
 
-        self.f_matrix = self.f_matrix.groupby("date", group_keys=False).progress_apply(
+        if nb_workers is None:
+            available_cores = os.cpu_count()
+            if available_cores is None:
+                cores_to_use = 1
+            else:
+                cores_to_use = int(available_cores * 0.95)
+            pandarallel.initialize(progress_bar=True, nb_workers=cores_to_use)
+        else:
+            pandarallel.initialize(progress_bar=True, nb_workers=nb_workers)
+
+        self.f_matrix = self.f_matrix.groupby("date", group_keys=False).parallel_apply(
             lambda x: loc_orthogonalize(x)
         )
         return 0
 
     def gaussianize(self):
+        """Apply Gaussianization to the features in the feature matrix.
+
+        For each column in the feature matrix,
+        this method fits a Gaussianization transformation and applies it to the column.
+
+        :return: int
+            Always returns 0.
+        """
         f_local = self.f_matrix.copy()
         for col in tqdm(f_local.columns[1:]):
 
@@ -156,8 +209,17 @@ class Data:
         return 0
 
     def detect_outlier_moons(self, norm_method="frobenius", out_method="zscore"):
-        """Returns
-        here f_matrix is post PCA.
+        """Detect outlier epochs using specified normalization and outlier detection methods.
+
+        This method computes a metric for each epoch using the chosen normalization method, and then detects outliers based on the specified outlier detection method.
+
+        :param norm_method: str, optional
+            Normalization method to compute the metric. Options: "frobenius", "determinant", "cond_n". Default is "frobenius".
+        :param out_method: str, optional
+            Outlier detection method. Currently supporting only "zscore". Default is "zscore".
+
+        :return: tuple
+            A tuple containing the detected outlier dates and a flag indicating if outliers were detected.
         """
         local_f_matrix = self.f_matrix
 
@@ -202,10 +264,16 @@ class Data:
         return dates, outliers_flag
 
     def pca(self, n_components=0.9):
-        """
-        returns : updates f_matrix(nd) --> f_matrix(nd)
-        """
+        """Perform Principal Component Analysis (PCA) on the feature matrix.
 
+        This method applies PCA to the feature matrix, reducing its dimensionality by retaining the specified proportion of explained variance.
+
+        :param n_components: float, optional
+            The proportion of variance to be retained. Default is 0.9.
+
+        :return: int
+            Always returns 0.
+        """
         epochs = self.f_matrix[self.f_matrix.columns[0]].unique()
 
         pca = PCA(n_components=n_components)
@@ -228,11 +296,18 @@ class Data:
         return 0
 
     def quantizer(self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]):
-        """
-        Returns: updated f_matrix after quantization
+        """Perform quantization on the feature matrix.
 
-        """
+        This method applies quantization to the feature matrix based on specified quantization bins. If 'rank' is True, it performs quantization on ranked data.
 
+        :param rank: bool, optional
+            If True, perform quantization on ranked data. Default is False.
+        :param bins: list, optional
+            The bin edges for quantization. Default is [0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1].
+
+        :return: int
+            Always returns 0.
+        """
         if rank:
             quant = self.f_matrix.groupby("date", group_keys=False).transform(
                 lambda x: hard_quantize(x.rank(pct=True, method="first"), bins)
@@ -246,8 +321,16 @@ class Data:
         return 0
 
     def cross_sectional_moments(self, to_moon=False):
-        """Return DataFrame col: df.columns"""
+        """Calculate cross-sectional moments of the feature matrix.
 
+        This method calculates various statistical moments (standard deviation, skewness, and kurtosis) of the features in the feature matrix.
+
+        :param to_moon: bool, optional
+            If True, calculate moments based on moons. If False, calculate moments based on dates. Default is False.
+
+        :return: pd.DataFrame
+            DataFrame containing calculated cross-sectional moments.
+        """
         df = self.f_matrix.copy()
         if to_moon:
             df["moon"] = df.date.astype("category").cat.codes

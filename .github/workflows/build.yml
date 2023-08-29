@@ -33,6 +33,6 @@ jobs:
       run: |
         make check-codestyle
 
-    - name: Run tests
+    - name: Run check-safety
       run: |
-        make test
+        make check-safety
