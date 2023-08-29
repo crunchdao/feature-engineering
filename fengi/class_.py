@@ -12,6 +12,8 @@ from tqdm.notebook import tqdm
 
 tqdm.pandas()
 
+import multiprocessing
+
 import scipy.stats as stats
 from pandarallel import pandarallel
 from sklearn.decomposition import PCA
@@ -168,7 +170,9 @@ class Data:
             return f_mat_temp
 
         if nb_workers is None:
-            pandarallel.initialize(progress_bar=True)
+            available_cores = multiprocessing.cpu_count()
+            cores_to_use = int(available_cores * 0.95)
+            pandarallel.initialize(progress_bar=True, nb_workers=cores_to_use)
         else:
             pandarallel.initialize(progress_bar=True, nb_workers=nb_workers)
 

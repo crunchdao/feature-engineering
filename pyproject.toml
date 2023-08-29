@@ -41,6 +41,7 @@ scikit-learn = "^1.2.1"
 pyarrow = "^12.0.0"
 ipywidgets = "^8.0.2"
 pandarallel = "^1.6.5"
+multiprocessing = "^2.6"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^23.1", allow-prereleases = true}

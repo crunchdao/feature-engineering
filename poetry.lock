@@ -978,6 +978,16 @@ files = [
 ]
 
 [[package]]
+name = "multiprocessing"
+version = "2.6.2.1"
+description = "Backport of the multiprocessing package to Python 2.4 and 2.5"
+optional = false
+python-versions = "*"
+files = [
+    {file = "multiprocessing-2.6.2.1.tar.gz", hash = "sha256:ef3b81ad85d7de252e5491b1daac028e17f9741cbe3625032e6eaa4ad4c79900"},
+]
+
+[[package]]
 name = "mypy"
 version = "1.0.1"
 description = "Optional static typing for Python"
@@ -2065,4 +2075,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9, <3.12"
-content-hash = "7ce3919954c587a7cec2f0f498ce51a034d3947ff225231d733dc404270efbe3"
+content-hash = "f4c14994ce093bf75f83eaba8291cdb73a4cc85d8d406a28621987910f989a11"
