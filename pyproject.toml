@@ -17,7 +17,7 @@ packages = [
 ]
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = ['Orthogonality']  #! Update me
+keywords = ['Orthogonality']
 
 # Pypi classifiers: https://pypi.org/classifiers/
 classifiers = [  #! Update me
@@ -41,18 +41,18 @@ scikit-learn = "^1.2.1"
 pyarrow = "^12.0.0"
 ipywidgets = "^8.0.2"
 pandarallel = "^1.6.5"
-multiprocessing = "^2.6"
 
 [tool.poetry.dev-dependencies]
+bandit = "^1.7.1"
 black = {version = "^23.1", allow-prereleases = true}
 isort = {extras = ["colors"], version = "^5.10.1"}
 mypy = "^1.0"
 mypy-extensions = "^0.4.3"
 pre-commit = "^3.1.1"
 pylint = "^2.11.1"
-pytest = "^7.2.1"
+pytest = "^7.4"
 pyupgrade = "^2.29.1"
-safety = "^1.10.3"
+safety = "^2.3.5"
 pydocstyle = "^6.3.0"
 coverage = "^6.1.2"
 coverage-badge = "^1.1.0"

@@ -12,7 +12,7 @@ from tqdm.notebook import tqdm
 
 tqdm.pandas()
 
-import multiprocessing
+import os
 
 import scipy.stats as stats
 from pandarallel import pandarallel
@@ -170,8 +170,11 @@ class Data:
             return f_mat_temp
 
         if nb_workers is None:
-            available_cores = multiprocessing.cpu_count()
-            cores_to_use = int(available_cores * 0.95)
+            available_cores = os.cpu_count()
+            if available_cores is None:
+                cores_to_use = 1
+            else:
+                cores_to_use = int(available_cores * 0.95)
             pandarallel.initialize(progress_bar=True, nb_workers=cores_to_use)
         else:
             pandarallel.initialize(progress_bar=True, nb_workers=nb_workers)
