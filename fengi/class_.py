@@ -137,7 +137,7 @@ class Data:
         self.f_matrix = preprocess(self.f_matrix)
         return 0
 
-    def orthogonalize(self, beta_coeff=0.0):
+    def orthogonalize(self, beta_coeff=0.0, nb_workers=None):
         """Cross-sectionally project f to be orthogonal to the subspace spanned by B, with respect to the dot product, in a least square sense.
 
         :param beta_coeff: float
@@ -167,7 +167,10 @@ class Data:
                 f_mat_temp[feature] = m
             return f_mat_temp
 
-        pandarallel.initialize(progress_bar=True)
+        if nb_workers is None:
+            pandarallel.initialize(progress_bar=True)
+        else:
+            pandarallel.initialize(progress_bar=True, nb_workers=nb_workers)
 
         self.f_matrix = self.f_matrix.groupby("date", group_keys=False).parallel_apply(
             lambda x: loc_orthogonalize(x)
