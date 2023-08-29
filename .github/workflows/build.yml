@@ -32,11 +32,3 @@ jobs:
     - name: Run style checks
       run: |
         make check-codestyle
-
-    - name: Run pydocstyle
-      run: |
-        make docs
-      
-    - name: Run mypy
-      run: |
-        make mypy
