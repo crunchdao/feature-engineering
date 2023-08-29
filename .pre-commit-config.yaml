@@ -1,6 +1,3 @@
-default_language_version:
-  python: python3.9
-
 default_stages: [commit, push]
 
 repos:
@@ -34,3 +31,15 @@ repos:
         entry: poetry run black --config pyproject.toml
         types: [python]
         language: system
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v0.971'
+    hooks:
+      - id: mypy
+        args: [--install-types, --non-interactive]
+
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args: ['--convention=google']

@@ -40,6 +40,7 @@ scipy = "^1.10.0"
 scikit-learn = "^1.2.1"
 pyarrow = "^12.0.0"
 ipywidgets = "^8.0.2"
+pandarallel = "^1.6.5"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^23.1", allow-prereleases = true}
@@ -53,8 +54,6 @@ pyupgrade = "^2.29.1"
 safety = "^1.10.3"
 coverage = "^6.1.2"
 coverage-badge = "^1.1.0"
-pytest-html = "^3.1.1"
-pytest-cov = "^4.0.0"
 
 [tool.black]
 # https://github.com/psf/black
