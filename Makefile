@@ -62,6 +62,10 @@ check-safety:
 .PHONY: lint
 lint: test check-codestyle mypy check-safety
 
+.PHONY: docs
+docs:
+	poetry run pydocstyle --convention=google .
+
 .PHONY: update-dev-deps
 update-dev-deps:
 	poetry add -D bandit@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
