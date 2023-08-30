@@ -54,7 +54,7 @@ pytest = "^7.4"
 pyupgrade = "^3.10"
 safety = "^2.3"
 pydocstyle = "^6.3"
-coverage = "^6.1"
+coverage = "^7.3"
 coverage-badge = "^1.1"
 
 [tool.black]
