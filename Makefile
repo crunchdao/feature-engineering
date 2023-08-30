@@ -59,6 +59,13 @@ check-safety:
 	poetry run safety check --full-report -i 51457
 	poetry run bandit -ll --recursive python_project tests
 
+.PHONY: doublecheck-safety
+doublecheck-safety:
+	poetry check
+	poetry run safety check --full-report -i 51457
+	poetry run bandit -ll --recursive python_project tests
+	trivy fs .
+
 .PHONY: lint
 lint: test check-codestyle mypy check-safety
 
