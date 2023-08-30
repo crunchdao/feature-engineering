@@ -16,6 +16,8 @@ updates:
     reviewers:
       - "matteoettam09"
       - "jeheran"
+      - "Caceresenzo"
+      - "xaviergilbert"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -30,3 +32,5 @@ updates:
     reviewers:
       - "matteoettam09"
       - "jeheran"
+      - "Caceresenzo"
+      - "xaviergilbert"
