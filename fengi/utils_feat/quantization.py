@@ -194,11 +194,7 @@ def quantize(x, bits=7, iterations=10):
     best_x_hat_q = LloydMaxQuantizer.quant(x, min_thre, min_repre)
 
     unique = np.unique(best_x_hat_q)
-    print("The quantized Values:")
-    print(unique)
     discrete = np.linspace(0, 1, bits)
-    print("are mapped to:")
-    print(discrete)
     for i in range(len(unique))[::-1]:
         best_x_hat_q[best_x_hat_q == unique[i]] = discrete[i]
 
