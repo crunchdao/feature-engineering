@@ -31,7 +31,7 @@ classifiers = [  #! Update me
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.12"
-pandas = "^1.5"
+pandas = "^2.1"
 tqdm = "^4.64"
 numpy = "^1.24"
 matplotlib = "^3.6"
@@ -51,10 +51,10 @@ mypy-extensions = "^0.4"
 pre-commit = "^3.1"
 pylint = "^2.11"
 pytest = "^7.4"
-pyupgrade = "^2.29"
+pyupgrade = "^3.10"
 safety = "^2.3"
 pydocstyle = "^6.3"
-coverage = "^6.1"
+coverage = "^7.3"
 coverage-badge = "^1.1"
 
 [tool.black]
