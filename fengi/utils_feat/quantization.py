@@ -1,36 +1,54 @@
-"""
+"""Collection of utility functions for Lloyd Max Quantizer.
+
 Resources: https://github.com/ninfueng/lloyd-max-quantizer
            https://en.wikipedia.org/wiki/Quantization_(signal_processing)#Neglecting_the_entropy_constraint:_Lloyd%E2%80%
            https://web.stanford.edu/class/ee398a/handouts/lectures/05-Quantization.pdf
 
-"""
-
-"""Collection of utility functions for Lloyd Max Quantizer.
-@author: Ninnart Fuengfusin
+Original Author: Ninnart Fuengfusin
 """
 import numpy as np
 import scipy.integrate as integrate
 
 
 def normal_dist(x, mean=0.0, vari=1.0):
+    """Compute the probability density of a normal distribution at a given point.
+
+    Args:
+        x: The point at which to compute the density.
+        mean: The mean of the normal distribution.
+        vari: The variance of the normal distribution.
+
+    Returns:
+        The probability density at the given point.
+    """
     """A normal distribution function created to use with scipy.integral.quad"""
     return (1.0 / (np.sqrt(2.0 * np.pi * vari))) * np.exp((-np.power((x - mean), 2.0)) / (2.0 * vari))
 
 
 def expected_normal_dist(x, mean=0.0, vari=1.0):
-    """A expected value of normal distribution function which created to use with scipy.integral.quad"""
+    """Compute the expected value of a normal distribution at a given point.
+
+    Args:
+        x: The point at which to compute the expected value.
+        mean: The mean of the normal distribution.
+        vari: The variance of the normal distribution.
+
+    Returns:
+        The expected value at the given point.
+    """
     return (x / (np.sqrt(2.0 * np.pi * vari))) * np.exp((-np.power((x - mean), 2.0)) / (2.0 * vari))
 
 
 def MSE_loss(x, x_hat_q):
-    """Find the mean square loss between x (orginal signal) and x_hat (quantized signal)
+    """Compute the mean squared error between two signals.
+
     Args:
-        x: the signal without quantization
-        x_hat_q: the signal of x after quantization
-    Return:
-        MSE: mean square loss between x and x_hat_q
+        x: The original signal.
+        x_hat_q: The quantized signal.
+
+    Returns:
+        The mean squared error between the two signals.
     """
-    # protech in case of input as tuple and list for using with numpy operation
     x = np.array(x)
     x_hat_q = np.array(x_hat_q)
     assert np.size(x) == np.size(x_hat_q)
@@ -40,19 +58,21 @@ def MSE_loss(x, x_hat_q):
 
 class LloydMaxQuantizer:
     """A class for iterative Lloyd Max quantizer.
-    This quantizer is created to minimize amount SNR between the orginal signal
-    and quantized signal.
+
+    This quantizer is created to minimize the signal-to-noise ratio (SNR)
+    between the original signal and quantized signal.
     """
 
     @staticmethod
     def start_repre(x, bit):
-        """
-        Generate representations of each threshold using
+        """Generate initial representations of each threshold.
+
         Args:
-            x: input signal for
-            bit: amount of bit
-        Return:
-            threshold:
+            x: The input signal.
+            bit: The number of bits for quantization.
+
+        Returns:
+            Initial threshold representations.
         """
         assert isinstance(bit, int)
         x = np.array(x)
@@ -70,7 +90,14 @@ class LloydMaxQuantizer:
 
     @staticmethod
     def threshold(repre):
-        """ """
+        """Compute the threshold values between representations.
+
+        Args:
+            repre: The array of representations.
+
+        Returns:
+            The threshold values.
+        """
         t_q = np.zeros(np.size(repre) - 1)
         for i in range(len(repre) - 1):
             t_q[i] = 0.5 * (repre[i] + repre[i + 1])
@@ -78,7 +105,16 @@ class LloydMaxQuantizer:
 
     @staticmethod
     def represent(thre, expected_dist, dist):
-        """ """
+        """Compute the representations of thresholds based on expected and actual distributions.
+
+        Args:
+            thre: The threshold values.
+            expected_dist: The expected distribution function.
+            dist: The actual distribution function.
+
+        Returns:
+            The computed representations.
+        """
         thre = np.array(thre)
         x_hat_q = np.zeros(np.size(thre) + 1)
         # prepare for all possible integration range
@@ -93,7 +129,16 @@ class LloydMaxQuantizer:
 
     @staticmethod
     def quant(x, thre, repre):
-        """Quantization operation."""
+        """Perform quantization operation on the input signal.
+
+        Args:
+            x: The input signal.
+            thre: The threshold values.
+            repre: The representation values.
+
+        Returns:
+            The quantized signal.
+        """
         thre = np.append(thre, np.inf)
         thre = np.insert(thre, 0, -np.inf)
         x_hat_q = np.zeros(np.shape(x))
@@ -119,9 +164,17 @@ class LloydMaxQuantizer:
         return x_hat_q
 
 
-def quantize(x, bits=7):
-    iterations = 10
+def quantize(x, bits=7, iterations=10):
+    """Perform Lloyd Max quantization on an input signal.
 
+    Args:
+        x: The input signal.
+        bits: The number of bits for quantization.
+        iterations: The number of iterations for optimization.
+
+    Returns:
+        The quantized signal with the lowest mean squared error.
+    """
     repre = LloydMaxQuantizer.start_repre(x, bits)
     min_loss = 1.0
 
@@ -141,11 +194,7 @@ def quantize(x, bits=7):
     best_x_hat_q = LloydMaxQuantizer.quant(x, min_thre, min_repre)
 
     unique = np.unique(best_x_hat_q)
-    print("The quantized Values:")
-    print(unique)
     discrete = np.linspace(0, 1, bits)
-    print("are mapped to:")
-    print(discrete)
     for i in range(len(unique))[::-1]:
         best_x_hat_q[best_x_hat_q == unique[i]] = discrete[i]
 
@@ -153,6 +202,15 @@ def quantize(x, bits=7):
 
 
 def hard_quantize(x, bins):
+    """Perform hard quantization on an input signal.
+
+    Args:
+        x: The input signal.
+        bins: The number of quantization bins.
+
+    Returns:
+        The quantized signal where each value is rounded to the nearest quantization level.
+    """
     quantiles = np.quantile(x, bins)
     quant_index = np.digitize(x, quantiles, right=True)
     x = np.round((quant_index) / (len(bins) - 1), 2)
