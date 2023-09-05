@@ -624,3 +624,4 @@ MigrationBackup/
 *.gz
 venv/
 .ipynb
+*.lock
