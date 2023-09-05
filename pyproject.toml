@@ -25,7 +25,7 @@ seaborn = { version = ">=0.10.0, <0.12.0"}
 scipy = { version = ">=1.10.0, <1.11.1"}
 scikit-learn = { version = ">=1.1.0, <1.2.0"}
 pyarrow = { version = ">=10.0.1, <12.0.1"}
-pandarallel = { version = ">=1.23.0, <1.25.0"}
+pandarallel = { version = ">=1.6.1, <1.6.4"}
 
 [tool.poetry.dev-dependencies]
 bandit = { version = ">=1.7.0, <1.7.4"}
