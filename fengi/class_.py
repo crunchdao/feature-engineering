@@ -150,7 +150,6 @@ class Data:
         """
 
         def loc_orthogonalize(f_mat_temp):
-            print(f'Epoch: {f_mat_temp["date"].iloc[0]}')
             features = f_mat_temp.columns[1:]
             b_mat_temp = self.b_matrix.loc[
                 self.b_matrix["date"].isin(f_mat_temp["date"]),
