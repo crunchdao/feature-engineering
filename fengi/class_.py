@@ -150,7 +150,6 @@ class Data:
         """
 
         def loc_orthogonalize(f_mat_temp):
-            print(f'Epoch: {f_mat_temp["date"].iloc[0]}')
             features = f_mat_temp.columns[1:]
             b_mat_temp = self.b_matrix.loc[
                 self.b_matrix["date"].isin(f_mat_temp["date"]),
@@ -175,9 +174,9 @@ class Data:
                 cores_to_use = 1
             else:
                 cores_to_use = int(available_cores * 0.95)
-            pandarallel.initialize(progress_bar=True, nb_workers=cores_to_use)
+            pandarallel.initialize(progress_bar=False, nb_workers=cores_to_use)
         else:
-            pandarallel.initialize(progress_bar=True, nb_workers=nb_workers)
+            pandarallel.initialize(progress_bar=False, nb_workers=nb_workers)
 
         self.f_matrix = self.f_matrix.groupby("date", group_keys=False).parallel_apply(
             lambda x: loc_orthogonalize(x)
