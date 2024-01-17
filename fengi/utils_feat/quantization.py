@@ -22,7 +22,9 @@ def normal_dist(x, mean=0.0, vari=1.0):
         The probability density at the given point.
     """
     """A normal distribution function created to use with scipy.integral.quad"""
-    return (1.0 / (np.sqrt(2.0 * np.pi * vari))) * np.exp((-np.power((x - mean), 2.0)) / (2.0 * vari))
+    return (1.0 / (np.sqrt(2.0 * np.pi * vari))) * np.exp(
+        (-np.power((x - mean), 2.0)) / (2.0 * vari)
+    )
 
 
 def expected_normal_dist(x, mean=0.0, vari=1.0):
@@ -36,7 +38,9 @@ def expected_normal_dist(x, mean=0.0, vari=1.0):
     Returns:
         The expected value at the given point.
     """
-    return (x / (np.sqrt(2.0 * np.pi * vari))) * np.exp((-np.power((x - mean), 2.0)) / (2.0 * vari))
+    return (x / (np.sqrt(2.0 * np.pi * vari))) * np.exp(
+        (-np.power((x - mean), 2.0)) / (2.0 * vari)
+    )
 
 
 def MSE_loss(x, x_hat_q):

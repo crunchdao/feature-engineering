@@ -1,3 +1,15 @@
+"""This module contains functions for data processing and analysis.
+
+Public Functions:
+- get_data(): Downloads data using a shell script and returns 0.
+- main(gd=True): Main function for data processing and analysis.
+
+Usage:
+    if __name__ == "__main__":
+        main(gd=False)
+"""
+
+import logging
 import os
 import pdb as pdb
 
@@ -15,26 +27,24 @@ from .utils_feat.quantization import quantize
 
 
 def get_data():
-    """ """
+    """Download Data From IPFS."""
     os.system("./data/get_data.sh")
     return 0
 
 
 def main(gd=True):
-    """
-    get_data: Boolean
-
-    """
-
+    """Example of Feature Engineering Pipeline."""
     if gd:
         get_data()
 
-    print("----------Targets quantization start --------------------------------")
+    logging.info(
+        "----------Targets quantization start --------------------------------"
+    )
     targets = pd.read_parquet("./data/target.parquet")
     targets = tg_process(targets)
-    print(targets.head())
-    print(targets.describe())
-    print("----------Targets quantization done--------------------------------")
+    logging.info(targets.head())
+    logging.info(targets.describe())
+    logging.info("----------Targets quantization done--------------------------------")
 
     f_matrix = pd.read_parquet("./data/f_matrix.parquet")
     b_matrix = pd.read_parquet("./data/b_matrix.parquet")
@@ -42,11 +52,15 @@ def main(gd=True):
     data = Data(f_matrix=f_matrix, b_matrix=b_matrix)
     data.plot_dist(targets, fig_name="check_tg_dist", ndist=100, gbell=False)
 
-    print("----------Data reading done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
-    print("----------Data orthogonalization start --------------------------------")
+    logging.info("----------Data reading done --------------------------------")
+    logging.info(data.f_matrix.head(), data.exposure().head())
+    logging.info(
+        "----------Data orthogonalization start --------------------------------"
+    )
     data.orthogonalize()
-    print("----------Data orthogonalization done --------------------------------")
+    logging.info(
+        "----------Data orthogonalization done --------------------------------"
+    )
 
     # Plot corr
     data.plot_corr(data.f_matrix, fig_name="check1_corr")
@@ -56,67 +70,82 @@ def main(gd=True):
     f_matrix_o = data.f_matrix.copy()
     outliers_flag = True
     while outliers_flag:
-        print(data.f_matrix.head(), data.exposure().head())
-        print("----------Data Gaussianize start --------------------------------")
+        logging.info(data.f_matrix.head(), data.exposure().head())
+        logging.info(
+            "----------Data Gaussianize start --------------------------------"
+        )
         data.gaussianize()
-        print("----------Data Gaussianize done --------------------------------")
+        logging.info("----------Data Gaussianize done --------------------------------")
 
         # Plot corr
         data.plot_corr(data.f_matrix, fig_name="check2_corr")
         # Plot dist
         data.plot_dist(data.f_matrix, fig_name="check2_dist")
 
-        print(data.f_matrix.head(), data.exposure().head())
-        print("----------Data Orthogonalization start --------------------------------")
+        logging.info(data.f_matrix.head(), data.exposure().head())
+        logging.info(
+            "----------Data Orthogonalization start --------------------------------"
+        )
         data.orthogonalize()
-        print("----------Data Orthogonalization done --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
+        logging.info(
+            "----------Data Orthogonalization done --------------------------------"
+        )
+        logging.info(data.f_matrix.head(), data.exposure().head())
 
         # Plot corr
         data.plot_corr(data.f_matrix, fig_name="check3_corr")
         # Plot dist
         data.plot_dist(data.f_matrix, fig_name="check3_dist")
 
-        print("----------Data standarization start --------------------------------")
+        logging.info(
+            "----------Data standarization start --------------------------------"
+        )
         data.standardize()
-        print("----------Data standarization done --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
+        logging.info(
+            "----------Data standarization done --------------------------------"
+        )
+        logging.info(data.f_matrix.head(), data.exposure().head())
 
         # PCA
-        print("----------PCA on f_matrix start --------------------------------")
+        logging.info("----------PCA on f_matrix start --------------------------------")
         data.pca()
-        print("----------PCA on f_matrix end --------------------------------")
-        print(data.f_matrix.head(), data.exposure().head())
+        logging.info("----------PCA on f_matrix end --------------------------------")
+        logging.info(data.f_matrix.head(), data.exposure().head())
 
         # Outliers
-        print("----------Outlier detection on f_matrix start --------------------------------")
+        logging.info(
+            "----------Outlier detection on f_matrix start --------------------------------"
+        )
         dates, outliers_flag = data.detect_outlier_moons()
-        print(
+        logging.info(
             f"----------Outlier detection on f_matrix end, {dates.count()} outliers detected. --------------------------------"
         )
         if outliers_flag:
-            f_matrix_o.drop(f_matrix_o.index[f_matrix_o["date"].isin(dates)], inplace=True)
+            f_matrix_o.drop(
+                f_matrix_o.index[f_matrix_o["date"].isin(dates)], inplace=True
+            )
 
             data.f_matrix = f_matrix_o
-            data.b_matrix.drop(b_matrix.index[b_matrix["date"].isin(dates)], inplace=True)
+            data.b_matrix.drop(
+                b_matrix.index[b_matrix["date"].isin(dates)], inplace=True
+            )
         else:
             break
 
-    print("----------standarize start--------------------------------")
-    # Standardize
+    logging.info("----------standarize start--------------------------------")
     data.standardize()
-    print("----------standarize end--------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
+    logging.info("----------standarize end--------------------------------")
+    logging.info(data.f_matrix.head(), data.exposure().head())
 
     # Plot corr
     data.plot_corr(data.f_matrix, fig_name="check4_corr")
     # Plot dist
     data.plot_dist(data.f_matrix, fig_name="check4_dist")
 
-    print("----------Data quantization start --------------------------------")
+    logging.info("----------Data quantization start --------------------------------")
     data.quantizer()
-    print("----------Data quantization done --------------------------------")
-    print(data.f_matrix.head(), data.exposure().head())
+    logging.info("----------Data quantization done --------------------------------")
+    logging.info(data.f_matrix.head(), data.exposure().head())
 
     # Plot corr
     data.plot_corr(data.f_matrix, fig_name="check5_corr")

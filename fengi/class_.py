@@ -19,7 +19,10 @@ from pandarallel import pandarallel
 from sklearn.decomposition import PCA
 
 from .utils_feat import gauss
-from .utils_feat.handling_outliers import detect_outliers_quantile, detect_outliers_zscore
+from .utils_feat.handling_outliers import (
+    detect_outliers_quantile,
+    detect_outliers_zscore,
+)
 from .utils_feat.quantization import hard_quantize
 
 
@@ -58,7 +61,9 @@ class Data:
             fact_exp_matrix = np.array(fact_exp_lis)
             return fact_exp_matrix
 
-        f_exp_matrix = self.f_matrix.groupby("date", group_keys=False).apply(lambda x: loc_exposure(x))
+        f_exp_matrix = self.f_matrix.groupby("date", group_keys=False).apply(
+            lambda x: loc_exposure(x)
+        )
         return f_exp_matrix
 
     def plot_corr(self, data, fig_name):
@@ -280,10 +285,14 @@ class Data:
 
         f_pca = pd.DataFrame()
         f_pca["date"] = self.f_matrix["date"]
-        f_pca[self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1]] = np.nan
+        f_pca[
+            self.f_matrix.columns[1 : len(pca.explained_variance_ratio_) + 1]
+        ] = np.nan
 
         for epoch in tqdm(epochs):
-            daily = self.f_matrix[self.f_matrix["date"] == epoch][self.f_matrix.columns[1:]]
+            daily = self.f_matrix[self.f_matrix["date"] == epoch][
+                self.f_matrix.columns[1:]
+            ]
             daily_pca = pca.transform(daily)
             f_pca.loc[
                 f_pca["date"] == epoch,
@@ -294,7 +303,9 @@ class Data:
 
         return 0
 
-    def quantizer(self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]):
+    def quantizer(
+        self, rank=False, bins=[0.0325, 0.1465, 0.365, 0.635, 0.8535, 0.9675, 1]
+    ):
         """Perform quantization on the feature matrix.
 
         This method applies quantization to the feature matrix based on specified quantization bins. If 'rank' is True, it performs quantization on ranked data.
