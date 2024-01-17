@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""
-Transform data so that it is approximately normally distributed
-
-This code written by Greg Ver Steeg, 2015.
-"""
+"""Transform data so that it is approximately normally distributed. This code written by Greg Ver Steeg, 2015."""
 
 from typing import Any, List, Optional, Text, Tuple, Union
 
@@ -35,23 +31,21 @@ def _update_x(x: Union[np.ndarray[Any, Any], List[Any]]) -> np.ndarray[Any, Any]
 
 
 class Gaussianize(sklearn.base.TransformerMixin):
-    """
-    Gaussianize data using various methods.
+    """Gaussianize data using various methods.
 
-    Conventions
-    ----------
     This class is a wrapper that follows sklearn naming/style (e.g. fit(X) to train).
     In this code, x is the input, y is the output. But in the functions outside the class, I follow
     Georg's convention that Y is the input and X is the output (Gaussianized) data.
 
     Parameters
     ----------
+    strategy : str, default='lambert'
+        Possibilities are 'lambert'[1], 'brute'[2], and 'boxcox'[3].
 
-    strategy : str, default='lambert'. Possibilities are 'lambert'[1], 'brute'[2] and 'boxcox'[3].
+    tol : float, default=1e-4
+        Tolerance parameter.
 
-    tol : float, default = 1e-4
-
-    max_iter : int, default = 100
+    max_iter : int, default=100
         Maximum number of iterations to search for correct parameters of Lambert transform.
 
     Attributes
@@ -63,11 +57,11 @@ class Gaussianize(sklearn.base.TransformerMixin):
 
     References
     ----------
-    [1] Georg M Goerg. The Lambert Way to Gaussianize heavy tailed data with
+    [1] Georg M Goerg. The Lambert Way to Gaussianize heavy-tailed data with
                         the inverse of Tukey's h transformation as a special case
         Author generously provides code in R: https://cran.r-project.org/web/packages/LambertW/
     [2] Valero Laparra, Gustavo Camps-Valls, and Jesus Malo. Iterative Gaussianization: From ICA to Random Rotations
-    [3] Box cox transformation and references: https://en.wikipedia.org/wiki/Power_transform
+    [3] Box Cox transformation and references: https://en.wikipedia.org/wiki/Power_transform
     """
 
     def __init__(
@@ -77,6 +71,7 @@ class Gaussianize(sklearn.base.TransformerMixin):
         max_iter: int = 100,
         verbose: bool = False,
     ):
+        """Initialize."""
         self.tol = tol
         self.max_iter = max_iter
         self.strategy = strategy
@@ -114,22 +109,31 @@ class Gaussianize(sklearn.base.TransformerMixin):
         if self.strategy == "lambert":
             return np.array([w_t(x_i, tau_i) for x_i, tau_i in zip(x.T, self.coefs_)]).T
         elif self.strategy == "brute":
-            return np.array([norm.ppf((rankdata(x_i) - 0.5) / len(x_i)) for x_i in x.T]).T
+            return np.array(
+                [norm.ppf((rankdata(x_i) - 0.5) / len(x_i)) for x_i in x.T]
+            ).T
         elif self.strategy == "boxcox":
-            return np.array([boxcox(x_i, lmbda=lmbda_i) for x_i, lmbda_i in zip(x.T, self.coefs_)]).T
+            return np.array(
+                [boxcox(x_i, lmbda=lmbda_i) for x_i, lmbda_i in zip(x.T, self.coefs_)]
+            ).T
         else:
             raise NotImplementedError("stategy='%s' not implemented." % self.strategy)
 
     def inverse_transform(self, y: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
         """Recover original data from Gaussianized data."""
         if self.strategy == "lambert":
-            return np.array([inverse(y_i, tau_i) for y_i, tau_i in zip(y.T, self.coefs_)]).T
+            return np.array(
+                [inverse(y_i, tau_i) for y_i, tau_i in zip(y.T, self.coefs_)]
+            ).T
         else:
             raise NotImplementedError(
-                "Inversion not supported for gaussianization transform '%s'" % self.strategy
+                "Inversion not supported for gaussianization transform '%s'"
+                % self.strategy
             )
 
-    def qqplot(self, x: np.ndarray[float, Any], prefix: str = "qq", output_dir: str = "/tmp/") -> None:
+    def qqplot(
+        self, x: np.ndarray[float, Any], prefix: str = "qq", output_dir: str = "/tmp/"
+    ) -> None:
         """Show qq plots compared to normal before and after the transform."""
         x = _update_x(x)
         y = self.transform(x)
@@ -144,19 +148,19 @@ class Gaussianize(sklearn.base.TransformerMixin):
 
 
 def w_d(z, delta):
-    # Eq. 9
+    """Equation 9."""
     if delta < _EPS:
         return z
     return np.sign(z) * np.sqrt(np.real(special.lambertw(delta * z**2)) / delta)
 
 
 def w_t(y, tau):
-    # Eq. 8
+    """Equation 8."""
     return tau[0] + tau[1] * w_d((y - tau[0]) / tau[1], tau[2])
 
 
 def inverse(x, tau):
-    # Eq. 6
+    """Equation 6."""
     u = (x - tau[0]) / tau[1]
     return tau[0] + tau[1] * (u * np.exp(u * u * (tau[2] * 0.5)))
 
@@ -164,7 +168,7 @@ def inverse(x, tau):
 def igmm(
     y: np.ndarray[Any, Any], tol: float = 1e-6, max_iter: int = 100
 ) -> Tuple[float, float, np.ndarray[Any, Any]]:
-    # Infer mu, sigma, delta using IGMM in Alg.2, Appendix C
+    """Infer mu, sigma, delta using IGMM in Alg.2, Appendix C."""
     if np.std(y) < _EPS:
         return np.mean(y), np.std(y).clip(_EPS), np.array([0], dtype=np.float64)
     delta0 = delta_init(y)
@@ -179,14 +183,17 @@ def igmm(
 
         if np.linalg.norm(np.array(tau1) - np.array(tau0)) < tol:
             break
-        else:
-            if k == max_iter - 1:
-                warnings.warn("Warning: No convergence after %d iterations. Increase max_iter." % max_iter)
+
+        if k == max_iter - 1:
+            warnings.warn(
+                "Warning: No convergence after %d iterations. Increase max_iter."
+                % max_iter
+            )
     return tau1
 
 
 def delta_gmm(z):
-    # Alg. 1, Appendix C
+    """Alg. 1, Appendix C."""
     delta0 = delta_init(z)
 
     def func(q):
@@ -205,6 +212,7 @@ def delta_gmm(z):
 
 
 def delta_init(z):
+    """Initialize delta0 parameter based on the kurtosis of the input data."""
     gamma = kurtosis(z, fisher=False, bias=False)
     with np.errstate(all="ignore"):
         delta0 = np.clip(1.0 / 66 * (np.sqrt(66 * gamma - 162.0) - 6.0), 0.01, 0.48)
