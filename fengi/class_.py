@@ -62,7 +62,7 @@ class Data:
             return fact_exp_matrix
 
         f_exp_matrix = self.f_matrix.groupby("date", group_keys=False).apply(
-            lambda x: loc_exposure(x)
+            loc_exposure
         )
         return f_exp_matrix
 

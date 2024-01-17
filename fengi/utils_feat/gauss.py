@@ -183,12 +183,12 @@ def igmm(
 
         if np.linalg.norm(np.array(tau1) - np.array(tau0)) < tol:
             break
-        else:
-            if k == max_iter - 1:
-                warnings.warn(
-                    "Warning: No convergence after %d iterations. Increase max_iter."
-                    % max_iter
-                )
+
+        if k == max_iter - 1:
+            warnings.warn(
+                "Warning: No convergence after %d iterations. Increase max_iter."
+                % max_iter
+            )
     return tau1
 
 
