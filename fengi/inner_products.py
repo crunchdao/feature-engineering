@@ -19,7 +19,9 @@ def B_to_BM_epoch(
 
     M = b_epoch_array @ b_pinv  # Compute Projection Matrix
 
-    M_df = pd.DataFrame(M, columns=b_epoch[symbol_column], index=b_epoch.index)
+    M_columns_list = [f"Projector_{index}" for index in range(b_epoch.shape[0])]
+    M_df = pd.DataFrame(M, columns=M_columns_list, index=b_epoch.index)
+
     BM_epoch = pd.concat([b_epoch_risks, M_df], axis=1)
     return BM_epoch
 
@@ -35,4 +37,5 @@ def concatenate_risk_dimensions_and_projection_matrix(
     BM = betas_matrix.groupby(time_column, group_keys=False).apply(
         B_to_BM_epoch, risk_factors, symbol_column
     )
+
     return pd.concat([dataframe, BM], axis=1)
