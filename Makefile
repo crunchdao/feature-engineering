@@ -19,9 +19,6 @@ poetry-remove:
 #* Installation
 .PHONY: install
 install:
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install poetry
-	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
 	poetry run pre-commit install
 
@@ -59,49 +56,6 @@ check-safety:
 	poetry run safety check --full-report -i 51457
 	poetry run bandit -ll --recursive python_project tests
 
-.PHONY: doublecheck-safety
-doublecheck-safety:
-	poetry check
-	poetry run safety check --full-report -i 51457
-	poetry run bandit -ll --recursive python_project tests
-	trivy fs .
-
-.PHONY: lint
-lint: test check-codestyle mypy check-safety
-
 .PHONY: docs
 docs:
 	poetry run pydocstyle --convention=google .
-
-.PHONY: update-dev-deps
-update-dev-deps:
-	poetry add -D bandit@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
-	poetry add -D --allow-prereleases black@latest
-
-#* Cleaning
-.PHONY: pycache-remove
-pycache-remove:
-	find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
-
-.PHONY: dsstore-remove
-dsstore-remove:
-	find . | grep -E ".DS_Store" | xargs rm -rf
-
-.PHONY: mypycache-remove
-mypycache-remove:
-	find . | grep -E ".mypy_cache" | xargs rm -rf
-
-.PHONY: ipynbcheckpoints-remove
-ipynbcheckpoints-remove:
-	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
-
-.PHONY: pytestcache-remove
-pytestcache-remove:
-	find . | grep -E ".pytest_cache" | xargs rm -rf
-
-.PHONY: build-remove
-build-remove:
-	rm -rf build/
-
-.PHONY: cleanup
-cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove
