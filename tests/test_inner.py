@@ -63,7 +63,10 @@ symbols = [
 
 n_factors = 4
 B = np.random.rand(len(symbols), n_factors)
+
 betas_matrix = pd.DataFrame(B)
+betas_matrix.columns = betas_matrix.columns.astype(str)
+
 risk_factors = betas_matrix.columns.to_list()
 betas_matrix["symbol"] = symbols
 betas_matrix["date"] = date_value
@@ -87,7 +90,8 @@ def test_orthogonality_after_concatenation():
     value_post = df_B_M["value"]
     B_post = df_B_M[risk_factors]
 
-    M = df_B_M[symbols].to_numpy()
+    M_columns = [c for c in df_B_M.columns if "Projector" in c]
+    M = df_B_M[M_columns].to_numpy()
 
     assert np.allclose(M, M.T)
     assert np.allclose(M @ M, M)
