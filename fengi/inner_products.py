@@ -6,9 +6,6 @@ transformations between vectors generated from Machine Learning models.
 
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-
-tqdm.pandas()
 
 
 def B_to_BM_epoch(
@@ -35,7 +32,7 @@ def concatenate_risk_dimensions_and_projection_matrix(
     risk_factors: list[str],
 ) -> pd.DataFrame:
     """Compute Projection Matrix and concatenate it to features and factors."""
-    BM = betas_matrix.groupby(time_column, group_keys=False).progress_apply(
-        lambda x: B_to_BM_epoch(x, risk_factors, symbol_column)
+    BM = betas_matrix.groupby(time_column, group_keys=False).apply(
+        B_to_BM_epoch, risk_factors, symbol_column
     )
     return pd.concat([dataframe, BM], axis=1)
