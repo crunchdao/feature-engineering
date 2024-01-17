@@ -8,7 +8,6 @@ import pandas as pd
 import scipy
 import seaborn as sns
 from tqdm import tqdm
-from tqdm.notebook import tqdm
 
 tqdm.pandas()
 
@@ -17,6 +16,7 @@ import os
 import scipy.stats as stats
 from pandarallel import pandarallel
 from sklearn.decomposition import PCA
+from tqdm.notebook import tqdm
 
 from .utils_feat import gauss
 from .utils_feat.handling_outliers import (
