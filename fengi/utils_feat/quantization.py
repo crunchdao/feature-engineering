@@ -7,6 +7,7 @@ Resources: https://github.com/ninfueng/lloyd-max-quantizer
 Original Author: Ninnart Fuengfusin
 """
 import numpy as np
+import pandas as pd
 import scipy.integrate as integrate
 
 
@@ -205,7 +206,7 @@ def quantize(x, bits=7, iterations=10):
     return best_x_hat_q
 
 
-def hard_quantize(x, bins):
+def hard_quantize(x: pd.Series, bins: list) -> np.array:
     """Perform hard quantization on an input signal.
 
     Args:
@@ -215,7 +216,18 @@ def hard_quantize(x, bins):
     Returns:
         The quantized signal where each value is rounded to the nearest quantization level.
     """
-    quantiles = np.quantile(x, bins)
+
+    if x.nunique() == 1 or x.isna().all():
+        # The series x is not quantizable in a meaningful way, returning a series of NaNs.
+        x = np.full(len(x), np.nan)
+        return x
+
+    quantiles = np.quantile(x.dropna(), bins)
     quant_index = np.digitize(x, quantiles, right=True)
-    x = np.round((quant_index) / (len(bins) - 1), 2)
-    return x
+
+    x_quantized = np.round((quant_index) / (len(bins) - 1), 2)
+
+    # Preserve NaN values in the output
+    x_quantized[x.isna()] = np.nan
+
+    return x_quantized
