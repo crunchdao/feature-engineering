@@ -6,8 +6,8 @@ Resources: https://github.com/ninfueng/lloyd-max-quantizer
 
 Original Author: Ninnart Fuengfusin
 """
-import pandas as pd
 import numpy as np
+import pandas as pd
 import scipy.integrate as integrate
 
 
