@@ -6,6 +6,7 @@ Resources: https://github.com/ninfueng/lloyd-max-quantizer
 
 Original Author: Ninnart Fuengfusin
 """
+import pandas as pd
 import numpy as np
 import scipy.integrate as integrate
 
@@ -201,7 +202,7 @@ def quantize(x, bits=7, iterations=10):
     return best_x_hat_q
 
 
-def hard_quantize(x, bins):
+def hard_quantize(x: pd.Series, bins: list) -> pd.Series:
     """Perform hard quantization on an input signal.
 
     Args:
