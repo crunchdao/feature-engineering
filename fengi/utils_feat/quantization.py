@@ -206,7 +206,7 @@ def quantize(x, bits=7, iterations=10):
     return best_x_hat_q
 
 
-def hard_quantize(x: pd.Series, bins: list) -> pd.Series:
+def hard_quantize(x: pd.Series, bins: list) -> np.array:
     """Perform hard quantization on an input signal.
 
     Args:
